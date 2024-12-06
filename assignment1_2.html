@@ -41,6 +41,50 @@
         </div>
     </div>
 
+    <!-- Chat Interface -->
+    <div class="chat-interface" id="chatInterface">
+        <div class="chat-header">
+            AI Chatbot
+        </div>
+        <div class="chat-body">
+            <p>Ask me anything about the assignment!</p>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chatInput" placeholder="Type your question here..." />
+            <button onclick="sendMessage()">Send</button>
+            <button onclick="toggleChat()">Close</button>
+        </div>
+    </div>
+
+    <!-- Chatbot Button -->
+    <button class="ai-chatbot-button" onclick="toggleChat()">AI Chatbot</button>
+
+    <script>
+        // Toggle Chat Interface Visibility
+        function toggleChat() {
+            const chatInterface = document.getElementById('chatInterface');
+            if (chatInterface.style.display === 'none' || chatInterface.style.display === '') {
+                chatInterface.style.display = 'block';
+            } else {
+                chatInterface.style.display = 'none';
+            }
+        }
+
+        // Placeholder for sending a message
+        function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            if (chatInput.value.trim() !== '') {
+                alert('You typed: ' + chatInput.value);
+                chatInput.value = ''; // Clear input
+            }
+        }
+        
+        function closeChat() {
+            const chatInterface = document.getElementById('chatInterface');
+            chatInterface.style.display = 'none';
+        }
+    </script>
+
     <script src="src/js/scripts.js"></script>
 </body>
 </html>
