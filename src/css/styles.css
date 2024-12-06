@@ -8,13 +8,19 @@ body, html {
     padding: 0;
     box-sizing: border-box;
     font-family: sans-serif, Arial;
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
 }
 
 .main-container {
     display: flex;
-    flex-direction: row;
-    height: 100vh;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally inside the container */
+    justify-content: center; /* Center content vertically inside the container */
+    height: 100%;
     width: 100%;
+    text-align: center; /* Center text inside the container */
 }
 
 .teacher-button,
@@ -50,7 +56,6 @@ body, html {
     right: 20%; /* Place on the right side */
 }
 
-
 .sidebar-left {
     background-color: var(--primary-color);
     color: white;
@@ -64,8 +69,79 @@ body, html {
     transition: transform 0.3s ease-in-out;
 }
 
+.navigation-container {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    margin-left: 100px;
+}
+
+.navigation-button {
+    position: absolute;
+    width: 200px; /* Button size */
+    text-align: center;
+}
+
+.navigation-button h2 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+}
+
+.nav-button {
+    display: block;
+    width: 200px;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.nav-button:hover {
+    transform: scale(1.1);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Positioning the buttons */
+.left-button {
+    left: 75%; /* Adjust this value to control horizontal position */
+    transform: translateY(-50%);
+}
+
+.right-button {
+    right: 75%; /* Adjust this value to control horizontal position */
+    transform: translateY(-50%);
+}
+
+.home-button a {
+    background-color: var(--secondary-color); /* Black */
+    display: flex; /* Use flexbox for text handling */
+    justify-content: space-between; /* Justify text across the button */
+    align-items: center; /* Center text vertically */
+    width: 50px;
+    height: 50px;
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem; /* Adjust font size if needed */
+    border-radius: 8px;
+    padding: 0 10px; /* Add padding to create space on the sides */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.home-button a:hover {
+    background-color: var(--primary-color); /* Change to orange on hover */
+    transform: scale(1.1); /* Slight scale effect */
+}
+
 .home-button {
-    background-color: black;
+    background-color: #000000;
 }
 
 .dashboard {
@@ -86,9 +162,42 @@ body, html {
     background-color: white;
 }
 
+
+.back-button-container {
+    position: fixed;
+    top: 20px; /* Position the button near the top of the page */
+    left: 100px; /* Offset the button by a little more from the sidebar */
+    z-index: 2; /* Ensure the button is above other elements */
+}
+
+.back-button {
+    display: block;
+    width: 50px;
+    height: 50px;
+    background-color: var(--secondary-color); /* Black */
+    color: white;
+    text-align: center;
+    line-height: 50px; /* Center text vertically */
+    font-size: 1rem; /* Slightly smaller text */
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s, transform 0.2s;
+    text-decoration: none;
+}
+
+.back-button:hover {
+    background-color: var(--primary-color); /* Change to orange on hover */
+    transform: scale(1.1); /* Slight scale effect */
+}
+
+
 @media screen and (max-width: 600px) {
     .sidebar-left {
         transform: translateX(-100%);
+    }
+
+    .back-button-container {
+        left: 15px; /* Move the button closer on small screens */
     }
 
     .dashboard {

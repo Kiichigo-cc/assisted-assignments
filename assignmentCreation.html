@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Creation</title>
+    <link rel="stylesheet" href="src/css/styles.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="sidebar-left">
+            <div class="home-button">
+                <!-- Home button -->
+                <a href="index.html" class="app-logomark">
+                    <span class="screenreader-only">Home</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="back-button-container">
+            <a href="teacherHome.html" class="back-button">
+                <span class="screenreader-only">Back</span>
+            </a>
+        </div>
+
+        <!-- Assignment Creation Form -->
+        <div class="assignment-creation">
+            <h1>Create New Assignment</h1>
+            
+            <form action="#" method="post" class="assignment-form">
+                <!-- Assignment Content Generation -->
+                <div class="form-section">
+                    <label for="assignment-content">Assignment Content:</label>
+                    <textarea id="assignment-content" name="content" rows="10" placeholder="Enter assignment content here..."></textarea>
+                </div>
+                
+                <!-- Import Share Code -->
+                <div class="form-section">
+                    <label for="share-code">Import Share Code:</label>
+                    <input type="text" id="share-code" name="share_code" placeholder="Enter share code here..." />
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="form-section">
+                    <button type="submit">Create Assignment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="src/js/scripts.js"></script>
+</body>
+</html>
