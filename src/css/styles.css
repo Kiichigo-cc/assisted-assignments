@@ -191,6 +191,56 @@ body, html {
     transform: scale(1.1); /* Slight scale effect */
 }
 
+.content-container {
+    margin-left: 100px; /* Account for the sidebar */
+    padding: 20px;
+    width: calc(100% - 100px); /* Adjust width to fit without covering the sidebar */
+    overflow-y: auto;
+}
+
+.view-submissions {
+    padding: 20px;
+}
+
+.view-submissions h1 {
+    font-size: 2rem;
+    color: var(--secondary-color);
+}
+
+.submission-card {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.submission-card h2 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.essay-content {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.ai-summary-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.ai-summary-button:hover {
+    background-color: #c23b08; /* Darker orange on hover */
+}
+
 .chat-interface {
     display: none; /* Hidden by default */
     position: fixed;
