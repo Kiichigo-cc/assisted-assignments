@@ -8,11 +8,13 @@ body, html {
     padding: 0;
     box-sizing: border-box;
     font-family: sans-serif, Arial;
+    height: 100%;
+    width: 100%;
 }
 
 .main-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     height: 100vh;
     width: 100%;
 }
@@ -64,8 +66,62 @@ body, html {
     transition: transform 0.3s ease-in-out;
 }
 
-.home-button {
-    background-color: black;
+.navigation-container {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    margin-left: 100px;
+}
+
+.navigation-button {
+    position: absolute;
+    width: 200px; /* Button size */
+    text-align: center;
+}
+
+.navigation-button h2 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+}
+
+.nav-button {
+    display: block;
+    width: 200px;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.nav-button:hover {
+    transform: scale(1.1);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Positioning the buttons */
+.left-button {
+    left: 25%; /* Adjust this value to control horizontal position */
+    transform: translateY(-50%);
+}
+
+.right-button {
+    right: 25%; /* Adjust this value to control horizontal position */
+    transform: translateY(-50%);
+}
+
+
+.home-button a {
+    background-color: var(--secondary-color); /* Black */
+    display: block; /* Make it a block element for width/height */
+    width: 50px;
+    height: 50px;
 }
 
 .dashboard {
