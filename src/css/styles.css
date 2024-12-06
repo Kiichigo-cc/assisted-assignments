@@ -17,6 +17,40 @@ body, html {
     width: 100%;
 }
 
+.teacher-button,
+.student-button {
+    position: fixed;
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* Adjust for the height of the button */
+    width: 150px; /* Set a consistent width */
+    height: 50px; /* Set a consistent height */
+    background-color: var(--secondary-color); /* Default black */
+    color: white;
+    text-align: center;
+    line-height: 50px; /* Vertically center text */
+    text-decoration: none;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.teacher-button:hover,
+.student-button:hover {
+    background-color: var(--primary-color); /* Change to orange on hover */
+    transform: translateY(-50%) scale(1.1); /* Slight scale on hover */
+}
+
+/* Specific positioning for each button */
+.teacher-button {
+    left: 20%; /* Place on the left side */
+}
+
+.student-button {
+    right: 20%; /* Place on the right side */
+}
+
+
 .sidebar-left {
     background-color: var(--primary-color);
     color: white;
