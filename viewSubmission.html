@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<script src="src/js/scripts.js"> </script>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,7 +29,6 @@
             <!-- View Submissions Section -->
             <div class="view-submissions">
                 <h1>Student Essay Submissions</h1>
-
                 <!-- Example Submission 1 -->
                 <div class="submission-card">
                     <h2>Essay by Student 1</h2>
@@ -37,7 +37,7 @@
                         odio vitae vestibulum. Integer nec odio. Praesent libero. Sed cursus ante
                         dapibus diam. Sed nisi...
                     </p>
-                    <button class="ai-summary-button">Generate AI Summary</button>
+                    <button class="ai-summary-button" onclick="generateAISummary()"> Generate AI Summary</button>
                 </div>
 
                 <!-- Example Submission 2 -->
@@ -48,12 +48,12 @@
                         nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis
                         vitae, justo. Nullam dictum felis eu pede mollis pretium...
                     </p>
-                    <button class="ai-summary-button">Generate AI Summary</button>
+                    <button class="ai-summary-button" onclick="generateAISummary2()"> Generate AI Summary</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="src/js/scripts.js"></script>
+    
 </body>
 </html>

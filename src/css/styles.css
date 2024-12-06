@@ -316,6 +316,30 @@ body, html {
     background-color: #444;
 }
 
+.form-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the content horizontally */
+    margin: 20px 0;
+}
+
+textarea {
+    width: 600px; /* Set width to create a square shape */
+    height: 500px; /* Set height to make it square */
+    font-size: 1.2rem; /* Adjust the font size to fit the area */
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    resize: none; /* Disable resizing of the text area */
+    box-sizing: border-box; /* Ensure padding and border don't affect width/height */
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color); /* Add focus styling */
+}
+
+
 
 @media screen and (max-width: 600px) {
     .sidebar-left {

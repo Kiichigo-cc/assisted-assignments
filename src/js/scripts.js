@@ -1,4 +1,4 @@
-<script>
+
     // Toggle Chat Interface Visibility
     function toggleChat() {
         const chatInterface = document.getElementById('chatInterface');
@@ -23,4 +23,21 @@
             chatInput.value = ''; // Clear input
         }
     }
-</script>
+
+    // Modify this text with your own custom message
+    // Show an alert with the summary text
+    function generateAISummary() {
+        const summaryText = "TODO: Implement an AI Message Summary";
+        alert(summaryText);
+    }
+
+    function generateAISummary2() {
+        const summaryText = "TODO: Implement an AI Message Summary";
+        alert(summaryText);
+    }
+
+    function createAssignment() {
+        const summaryText = "TODO: Implement a Assignment Creation";
+        alert(summaryText);
+    }
+
