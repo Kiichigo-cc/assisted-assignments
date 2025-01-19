@@ -3,14 +3,17 @@
     --secondary-color: #000000; /* Paddletail Black */
 }
 
-body, html {
+body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
     font-family: sans-serif, Arial;
     display: flex;
     justify-content: center; /* Center content horizontally */
     align-items: center; /* Center content vertically */
+    /* width: 100%; */
+    width: 100%;
+    height: 100%;
 }
 
 .main-container {
@@ -20,6 +23,7 @@ body, html {
     justify-content: center; /* Center content vertically inside the container */
     height: 100%;
     width: 100%;
+   
     text-align: center; /* Center text inside the container */
 }
 
@@ -70,18 +74,19 @@ body, html {
 }
 
 .navigation-container {
-    position: relative;
     height: 100vh;
     width: 100%;
+    max-width: 1300px;
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     z-index: 1;
     margin-left: 100px;
+    gap: 128px;
 }
 
 .navigation-button {
-    position: absolute;
     width: 200px; /* Button size */
     text-align: center;
 }
@@ -146,11 +151,13 @@ body, html {
 
 .dashboard {
     background-color: #ecf0f1;
-    flex: 1;
+    /* flex: 1; */
+    max-width: 1300px;
     padding: 40px;
-    margin-left: 6%;
-    overflow-y: auto;
-    text-align: left
+    margin-left: 70px;
+  
+    text-align: left;
+    width: 100%;
 }
 
 .dashboard h1 {
@@ -191,12 +198,7 @@ body, html {
     transform: scale(1.1); /* Slight scale effect */
 }
 
-.content-container {
-    margin-left: 100px; /* Account for the sidebar */
-    padding: 20px;
-    width: calc(100% - 100px); /* Adjust width to fit without covering the sidebar */
-    overflow-y: auto;
-}
+
 
 .view-submissions {
     padding: 20px;
@@ -339,7 +341,72 @@ textarea:focus {
     border-color: var(--primary-color); /* Add focus styling */
 }
 
+.assignment-card-container {
+    display: flex;
+    flex-direction: column;
+}
 
+.assignment-card {
+
+    box-sizing: border-box;
+    /* display: block; */
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+    
+}
+
+.assignment-card h3 {
+    margin: 0px;
+    padding: 24px;
+}
+
+.list {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    
+}
+
+.list a {
+    color: black;
+}
+
+.subtask {
+    display: flex;
+    align-items: center; /* Vertically center-align content */
+    height: 75px;
+    padding: 0px 24px;
+    background-color: #ecf0f1;
+    border-top: 2px solid #d0d0d0;
+}
+
+.assignment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.additional-link a {
+    background-color: black;
+    color: white;
+    text-decoration: none;
+    padding: 12px 6px;
+    border-radius: 8px;
+    width: 150px;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.additional-link a:hover {
+    background-color: var(--primary-color); /* Change to orange on hover */
+    transform: translateY(-50%) scale(1.1); /* Slight scale on hover */
+}
 
 @media screen and (max-width: 600px) {
     .sidebar-left {
@@ -353,4 +420,12 @@ textarea:focus {
     .dashboard {
         margin-left: 0;
     }
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-row {
+    flex-direction: row;
 }

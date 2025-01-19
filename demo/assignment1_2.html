@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<script src="js/scripts.js"></script>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -22,28 +21,24 @@
         </div>
 
 
-
         <div class="dashboard dashboardWhite">
             <!-- Dashboard -->
             <h1>English Assignment</h1>
             <div class="assignment-content">
                 <p>
-                    Write a 500-word essay analyzing the themes of ambition and morality in Shakespeare's *Macbeth*. 
+                    Write a 500-word essay analyzing the themes of ambition and morality in Shakespeare's *Romeo and Juliet*. 
                     Use specific examples from the text to support your analysis. 
                 </p>
                 <p>
-                    Focus on how Macbeth’s ambition drives his actions and how his moral conflict contributes to his downfall. 
-                    Discuss the relevance of these themes in modern society and provide your personal insights.
+                    Focus on key moments in the play where fate seems to intervene, such as the meeting at the Capulet party, and explore whether 
+                    the characters had the power to change their destiny. Provide examples from the text to support your analysis.
                 </p>
                 <p>
                     Submit your assignment by the due date, ensuring proper MLA formatting, including a title page and works cited section.
                 </p>
-                <p>
-                    Part two of the assignment will be on Shakespeare's *Romeo and Juliet*.
-                </p>
             </div>
             <div class="additional-link" style="margin-top: 20px;">
-                <a href="assignment1_2.html">Assignment 1.2</a>
+                <a href="assignment1_1.html">Assignment 1.1</a>
             </div>
         </div>
     </div>
@@ -80,8 +75,17 @@
         // Placeholder for sending a message
         function sendMessage() {
             const chatInput = document.getElementById('chatInput');
+            const chatBody = document.querySelector('.chat-body'); // Get the chat body
+        
             if (chatInput.value.trim() !== '') {
-                alert('You typed: ' + chatInput.value);
+                // Create a new paragraph element for the user's message
+                const userMessage = document.createElement('p');
+                userMessage.textContent = chatInput.value;
+                userMessage.classList.add('user-message'); // Optional: Add a class for styling
+        
+                // Append the user's message to the chat body
+                chatBody.appendChild(userMessage);
+        
                 chatInput.value = ''; // Clear input
             }
         }
@@ -91,5 +95,7 @@
             chatInterface.style.display = 'none';
         }
     </script>
+
+    <script src="src/js/scripts.js"></script>
 </body>
 </html>
