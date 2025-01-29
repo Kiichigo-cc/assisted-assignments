@@ -16,8 +16,7 @@ npm run dev
 ## To run chatbot server
 
 ```
-cd frontend
-cd components
+cd backend
 npm install @google/generative-ai
 npm install dotenv 
 npm install express
