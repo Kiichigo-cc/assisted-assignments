@@ -2,27 +2,35 @@ import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { fetchChatbotResponse } from "./ChatbotApi"; // Import the API function
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  //placeholder until ai functionality
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (input.trim() === "") return;
 
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { text: input, sender: "user" },
-    ]);
-
+    const userMessage = { text: input, sender: "user" };
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
     setInput("");
-    setTimeout(() => {
+    setLoading(true);
+
+    try {
+      const botResponse = await fetchChatbotResponse(input);
       setMessages((prevMessages) => [
         ...prevMessages,
-        { text: "This is a response from the chatbot.", sender: "bot" },
+        { text: botResponse, sender: "bot" },
       ]);
-    }, 1000);
+    } catch (error) {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: "Error getting response.", sender: "bot" },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -43,7 +51,7 @@ export default function Chatbot() {
             }`}
           >
             <Card
-              className={`max-w-[70%] p-3  ${
+              className={`max-w-[70%] p-3 ${
                 message.sender === "user"
                   ? "bg-background text-primary"
                   : "bg-primary text-background"
@@ -53,6 +61,7 @@ export default function Chatbot() {
             </Card>
           </div>
         ))}
+        {loading && <div className="text-center text-gray-500">Typing...</div>}
       </CardContent>
       <CardFooter className="flex-none">
         <div className="flex flex-col w-full space-y-2">
@@ -62,9 +71,12 @@ export default function Chatbot() {
             onKeyDown={handleKeyDown}
             className="w-full resize-none"
             placeholder="Type your message here."
+            disabled={loading}
           />
           <div className="flex justify-end">
-            <Button onClick={handleSendMessage}>Send message</Button>
+            <Button onClick={handleSendMessage} disabled={loading}>
+              {loading ? "Sending..." : "Send message"}
+            </Button>
           </div>
         </div>
       </CardFooter>
