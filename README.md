@@ -13,3 +13,13 @@ npm install
 npm run dev
 ```
 
+## To run chatbot server
+
+```
+cd frontend
+cd components
+npm install @google/generative-ai
+npm install dotenv 
+npm install express
+npm install cors 
+```
