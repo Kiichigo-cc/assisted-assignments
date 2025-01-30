@@ -3,6 +3,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { fetchChatbotResponse } from "./ChatbotApi"; // Import the API function
+import ReactMarkdown from "react-markdown";
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([]);
@@ -53,11 +54,11 @@ export default function Chatbot() {
             <Card
               className={`max-w-[70%] p-3 ${
                 message.sender === "user"
-                  ? "bg-background text-primary"
-                  : "bg-primary text-background"
+                  ? "bg-background text-foreground"
+                  : "bg-muted/40 text-foreground"
               }`}
             >
-              {message.text}
+              <ReactMarkdown>{message.text}</ReactMarkdown>
             </Card>
           </div>
         ))}
