@@ -1,6 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Chatbot from "@/components/Chatbot";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import {
+  SidebarProvider,
+  SidebarInset,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import AppSidebar from "@/components/Sidebar";
 import Courses, { CoursePage } from "@/components/Course";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -13,6 +17,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/theme-provider";
+import { Separator } from "@/components/ui/separator";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
@@ -45,29 +59,54 @@ function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <BrowserRouter>
-        <SidebarProvider
-          style={{
-            "--sidebar-width": "10rem",
-            "--sidebar-width-mobile": "10rem",
-          }}
-        >
+        <SidebarProvider>
           <AppSidebar />
-          <div className="w-full p-8">
-            <Routes>
-              <Route path="/" element={<Courses />} />
-              <Route path="/courses" element={<Courses />} />
-              <Route path="/courses/:courseId" element={<CoursePage />} />
-              <Route path="/chatbot" element={<Chatbot />} />
-              <Route
-                path="/settings"
-                element={
-                  <div>
-                    Light Mode/Dark Mode <ModeToggle />
-                  </div>
-                }
-              />
-            </Routes>
-          </div>
+          <SidebarInset>
+            <header className="flex h-16 shrink-0 items-center gap-2">
+              <div className="flex items-center gap-2 px-4">
+                <SidebarTrigger className="-ml-1" />
+                <Separator orientation="vertical" className="mr-2 h-4" />
+                {/* <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem className="hidden md:block">
+                      <BreadcrumbLink href="#">
+                        Building Your Application
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className="hidden md:block" />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb> */}
+              </div>
+            </header>
+            <div className="w-full p-8">
+              <Routes>
+                <Route path="/" element={<Courses />} />
+                <Route path="/courses" element={<Courses />} />
+                <Route path="/courses/:courseId" element={<CoursePage />} />
+                <Route
+                  path="/chatbot"
+                  element={
+                    <ProtectedRoute>
+                      <Chatbot />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/settings"
+                  element={
+                    <div>
+                      <div>
+                        Light Mode/Dark Mode <ModeToggle />
+                      </div>
+                    </div>
+                  }
+                />
+              </Routes>
+            </div>
+          </SidebarInset>
         </SidebarProvider>
       </BrowserRouter>
     </ThemeProvider>

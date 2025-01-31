@@ -2,8 +2,15 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
 
 dotenv.config();
+
+const checkJwt = auth({
+  audience: process.env.AUDIENCE,
+  issuerBaseURL: process.env.ISSUER_BASE_URL,
+  tokenSigningAlg: process.env.TOKEN_SIGNING_ALG,
+});
 
 const app = express();
 const PORT = 5001;
@@ -15,8 +22,9 @@ app.use(cors());
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-app.post("/chat", async (req, res) => {
+app.post("/chat", checkJwt, async (req, res) => {
   try {
+    console.log("Received user data:", req.body.user); // Log the user object
     const userMessage = req.body.message;
 
     // Generate response from Gemini

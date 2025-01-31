@@ -4,11 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { fetchChatbotResponse } from "./ChatbotApi"; // Import the API function
 import ReactMarkdown from "react-markdown";
+import { useAuth0 } from "@auth0/auth0-react";
+import useAccessToken from "@/hooks/useAccessToken";
 
 export default function Chatbot() {
+  const { user } = useAuth0();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const { accessToken, error } = useAccessToken();
 
   const handleSendMessage = async () => {
     if (input.trim() === "") return;
@@ -19,7 +23,7 @@ export default function Chatbot() {
     setLoading(true);
 
     try {
-      const botResponse = await fetchChatbotResponse(input);
+      const botResponse = await fetchChatbotResponse(input, user, accessToken);
       setMessages((prevMessages) => [
         ...prevMessages,
         { text: botResponse, sender: "bot" },
