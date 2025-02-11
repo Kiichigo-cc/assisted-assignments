@@ -50,7 +50,11 @@ const items = [
     url: "/chatbot",
     icon: MessageCircle,
   },
-
+  {
+    title: "Chatlogs",
+    url: "/chatlogs",
+    icon: MessageCircle,
+  },
   {
     title: "Settings",
     url: "/settings",

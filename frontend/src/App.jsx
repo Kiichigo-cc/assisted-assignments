@@ -27,6 +27,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Chatlogs from "./components/Chatlogs";
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
@@ -91,6 +92,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <Chatbot />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/chatlogs"
+                  element={
+                    <ProtectedRoute>
+                      <Chatlogs />
                     </ProtectedRoute>
                   }
                 />
