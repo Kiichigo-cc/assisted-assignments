@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
 import {
   Card,
   CardContent,
@@ -101,12 +102,62 @@ export function CourseCard({ name, courseNumber, term, courseId }) {
 }
 
 export default function Courses() {
+  const [courses, setCourses] = useState([]);
   const [courseName, setCourseName] = useState("");
   const [courseId, setCourseId] = useState("");
   const [term, setTerm] = useState("");
+  const [courseNumber, setCourseNumber] = useState("");
 
-  const handleSubmit = () => {
-    console.log("Course Added:", { courseName, courseId, term });
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("http://localhost:5001/courses", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setCourses(data); // Update the state with the fetched courses
+        } else {
+          console.error("Failed to fetch courses");
+        }
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  const handleSubmit = async () => {
+    const newCourse = { courseName, courseId, term, courseNumber };
+
+    try {
+      const response = await fetch("http://localhost:5001/courses", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newCourse),
+      });
+
+      if (response.ok) {
+        const addedCourse = await response.json();
+        setCourses([...courses, addedCourse]); // Update the courses state with the new course
+        // Clear the form after submission
+        setCourseName("");
+        setCourseId("");
+        setTerm("");
+        setCourseNumber("");
+      } else {
+        console.error("Failed to add course");
+      }
+    } catch (error) {
+      console.error("Error adding course:", error);
+    }
   };
 
   const inputs = [
@@ -128,46 +179,66 @@ export default function Courses() {
       value: term,
       onChange: (e) => setTerm(e.target.value),
     },
+    {
+      id: "courseNumber",
+      label: "Course Number",
+      value: courseNumber,
+      onChange: (e) => setCourseNumber(e.target.value),
+    },
   ];
 
   //fetch here
-  const courseList = [
-    {
-      name: "Introduction to Programming",
-      courseNumber: "CS101",
-      term: "Fall 2025",
-      courseId: "1234567890",
-    },
-    {
-      name: "Data Structures",
-      courseNumber: "CS102",
-      term: "Spring 2025",
-      courseId: "9876543210",
-    },
-  ];
+
+
+  const renderCourses = () => {
+    return courses.map((course) => (
+      <Link to={`/courses/${course.courseId}`} key={course.courseId} className="block">
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow duration-300">
+          <CardHeader>
+            <CardTitle>{course.courseNumber} - {course.courseName}</CardTitle>
+            <CardDescription>Term: {course.term}</CardDescription>
+          </CardHeader>
+        </Card>
+      </Link>
+    ));
+  };
 
   return (
     <Card className="w-full border-none shadow-none">
       <CardHeader className="flex flex-row items-center">
         <CardTitle>Courses</CardTitle>
-        <DialogButton
-          buttonLabel={"+ Add Course"}
-          dialogTitle={"Add Course"}
-          inputs={inputs}
-          onSubmit={handleSubmit}
-        />
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="ml-auto">+ Add Course</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Add Course</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-2 py-4">
+              {inputs.map((input, index) => (
+                <div key={index}>
+                  <Label htmlFor={input.id} className="text-left">
+                    {input.label}
+                  </Label>
+                  <Input
+                    id={input.id}
+                    value={input.value}
+                    onChange={input.onChange}
+                    className="col-span-3"
+                  />
+                </div>
+              ))}
+            </div>
+            <DialogFooter>
+              <Button onClick={handleSubmit} type="submit">Save changes</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {courseList.map((course) => (
-            <CourseCard
-              key={course.courseId}
-              name={course.name}
-              courseNumber={course.courseNumber}
-              term={course.term}
-              courseId={course.courseId}
-            />
-          ))}
+          {renderCourses()}
         </div>
       </CardContent>
     </Card>
