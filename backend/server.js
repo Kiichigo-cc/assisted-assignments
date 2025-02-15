@@ -46,8 +46,27 @@ app.post("/chat", checkJwt, async (req, res) => {
     const userName = req.body.user.name;
     const userMessage = req.body.message;
 
+    // A test to try to get Gemini to remember previous responses. Arbitrarily set to 10.
+    const previousMessages = await ChatLogModel.findAll({
+      where: { userId },
+      order: [["timestamp", "ASC"]],
+      limit: 10,
+    });
+
+    // Format the previous messages.
+    const history = previousMessages.map(log => ({
+      role: log.sender === "user" ? "user" : "assistant",
+      parts: [{ text: log.message }]
+    }));
+
+    // Push the current user message onto the stack of messages.
+    history.push({ role: "user", parts: [{ text: userMessage }] });
+
+    //console.log("Sending to Gemini:", JSON.stringify(history, null, 2));
+
     // Generate response from Gemini
-    const result = await model.generateContent(userMessage);
+    const result = await model.generateContent({contents: history});
+    //const result = await model.generateContent(userMessage);
     const reply = result.response.text();
 
     await ChatLogModel.create({
