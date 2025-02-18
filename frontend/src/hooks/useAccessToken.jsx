@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { jwtDecode } from "jwt-decode";
 
 const useAccessToken = () => {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
   const [accessToken, setAccessToken] = useState(null);
+  const [scopes, setScopes] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -17,7 +19,9 @@ const useAccessToken = () => {
             scope: "read:current_user",
           },
         });
-        setAccessToken(token); // Set the access token in state
+        console.log(token);
+        setAccessToken(token);
+        setScopes(jwtDecode(token).permissions);
       } catch (e) {
         setError("Error fetching access token: " + e.message);
       }
@@ -26,7 +30,7 @@ const useAccessToken = () => {
     fetchAccessToken();
   }, [getAccessTokenSilently, isAuthenticated]);
 
-  return { accessToken, error };
+  return { accessToken, scopes, error };
 };
 
 export default useAccessToken;
