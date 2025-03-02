@@ -1,4 +1,5 @@
 import { ChatLogModel } from "../server.js";
+import { AssignmentModel } from "../server.js";
 import { genAI, model } from "../server.js";
 
 export const chat = async (req, res) => {
@@ -7,12 +8,25 @@ export const chat = async (req, res) => {
     const userId = req.body.user.sub;
     const userName = req.body.user.name;
     const userMessage = req.body.message;
+    const assignmentId = req.body.assignmentId;
+    //const assignmentContext = req.body.assignmentContext;
+    let assignmentContext = req.body.assignmentContext;
+    console.log("Received assignment context:", assignmentContext);
+
+    if (assignmentId) {
+      // Fetch assignment details
+      const assignment = await AssignmentModel.findByPk(assignmentId);
+      if (assignment) {
+        assignmentContext = `Assignment: ${assignment.name}\nPurpose: ${assignment.purpose}\nInstructions: ${assignment.instructions}\n`;
+      }
+    }
+    console.log("Received assignment context:", assignmentContext);
 
     // A test to try to get Gemini to remember previous responses. Arbitrarily set to 10.
     const previousMessages = await ChatLogModel.findAll({
       where: { userId },
       order: [["timestamp", "ASC"]],
-      limit: 10,
+      limit: 100,
     });
 
     // Format the previous messages.
@@ -20,6 +34,14 @@ export const chat = async (req, res) => {
       role: log.sender === "user" ? "user" : "assistant",
       parts: [{ text: log.message }],
     }));
+
+    if (assignmentContext) {
+      const contextString = typeof assignmentContext === "string" ? assignmentContext : JSON.stringify(assignmentContext);
+      const modifiedContextString = `This is the context of an assignment, answer any questions with this context: ${contextString}`;
+      //history.unshift({ role: "user", parts: [{text: assignmentContext }] });
+      history.push({ role: "user", parts: [{ text: contextString }] });
+    }
+    
 
     // Push the current user message onto the stack of messages.
     history.push({ role: "user", parts: [{ text: userMessage }] });
@@ -56,7 +78,7 @@ export const chat = async (req, res) => {
 
 export const getChatLogs = async (req, res) => {
   try {
-    const { userId, limit = 10, offset = 0 } = req.query;
+    const { userId, limit = 100, offset = 0 } = req.query;
 
     // Build query options
     const queryOptions = {

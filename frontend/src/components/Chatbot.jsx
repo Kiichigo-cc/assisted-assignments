@@ -6,13 +6,26 @@ import { fetchChatbotResponse } from "./ChatbotApi"; // Import the API function
 import ReactMarkdown from "react-markdown";
 import { useAuth0 } from "@auth0/auth0-react";
 import useAccessToken from "@/hooks/useAccessToken";
+import { useLocation } from "react-router-dom";
 
 export default function Chatbot() {
   const { user } = useAuth0();
+  const { search } = useLocation();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const { accessToken, error } = useAccessToken();
+
+  const urlParams = new URLSearchParams(search);
+  const assignmentId = urlParams.get("assignmentId");
+  const purpose = urlParams.get("purpose");
+  const instructions = urlParams.get("instructions");
+
+  const assignmentContext = {
+    assignmentId,
+    purpose,
+    instructions,
+  };
 
   const handleSendMessage = async () => {
     if (input.trim() === "") return;
@@ -23,7 +36,7 @@ export default function Chatbot() {
     setLoading(true);
 
     try {
-      const botResponse = await fetchChatbotResponse(input, user, accessToken);
+      const botResponse = await fetchChatbotResponse(input, user, accessToken, assignmentContext);
       setMessages((prevMessages) => [
         ...prevMessages,
         { text: botResponse, sender: "bot" },

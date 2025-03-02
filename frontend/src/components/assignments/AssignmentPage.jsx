@@ -10,6 +10,9 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { fetchAssignmentData } from "../../api/assignmentApi.js";
+import { Button } from "@/components/ui/button";
+import { MessageCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const AssignmentPage = () => {
   const { courseId, assignmentId } = useParams();
@@ -17,11 +20,18 @@ const AssignmentPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { accessToken } = useAccessToken();
+  const navigate = useNavigate();
+
+  const handleChatbotClick = () => {
+    const encodedPurpose = encodeURIComponent(assignmentData.purpose || "N/A");
+    const encodedInstructions = encodeURIComponent(assignmentData.instructions || "N/A");
+    navigate(`/chatbot?assignmentId=${assignmentId}&purpose=${encodedPurpose}&instructions=${encodedInstructions}`);
+  };
 
   useEffect(() => {
     if (!accessToken) {
-      setError("Access token is missing");
-      setLoading(false);
+      //setError("Access token is missing");
+      //setLoading(false);
       return;
     }
 
@@ -136,6 +146,10 @@ const AssignmentPage = () => {
           <p>No assignment data available.</p>
         )}
       </CardContent>
+      <Button onClick={handleChatbotClick} variant="outline">
+            <MessageCircle className="mr-2" />
+            Ask Chatbot
+          </Button>
     </Card>
   );
 };

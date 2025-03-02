@@ -1,4 +1,4 @@
-export async function fetchChatbotResponse(message, user, accessToken) {
+export async function fetchChatbotResponse(message, user, accessToken, assignmentContext ) {
   try {
     const response = await fetch("http://localhost:5001/chat", {
       method: "POST",
@@ -6,7 +6,7 @@ export async function fetchChatbotResponse(message, user, accessToken) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({ message, user }),
+      body: JSON.stringify({ message, user, assignmentContext }),
     });
 
     if (!response.ok) {
