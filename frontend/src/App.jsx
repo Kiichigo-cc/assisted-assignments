@@ -6,7 +6,9 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/Sidebar";
-import Courses, { CoursePage } from "@/components/Course";
+import Courses from "@/components/courses/Course";
+
+import CoursePage from "./components/courses/CoursePage";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,6 +30,9 @@ import {
 } from "@/components/ui/breadcrumb";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Chatlogs from "./components/Chatlogs";
+import { Toaster } from "@/components/ui/sonner";
+import AssignmentPage from "./components/assignments/AssignmentPage";
+import TaskPage from "./components/assignments/TaskPage";
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
@@ -84,9 +89,46 @@ function App() {
             </header>
             <div className="w-full p-8">
               <Routes>
-                <Route path="/" element={<Courses />} />
-                <Route path="/courses" element={<Courses />} />
-                <Route path="/courses/:courseId" element={<CoursePage />} />
+                <Route
+                  path="/"
+                  element={
+                    <ProtectedRoute>
+                      <Courses />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/courses"
+                  element={
+                    <ProtectedRoute>
+                      <Courses />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/courses/:courseId"
+                  element={
+                    <ProtectedRoute>
+                      <CoursePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/courses/:courseId/:assignmentId"
+                  element={
+                    <ProtectedRoute>
+                      <AssignmentPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/courses/:courseId/:assignmentId/:taskId"
+                  element={
+                    <ProtectedRoute>
+                      <TaskPage />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route
                   path="/chatbot"
                   element={
@@ -118,6 +160,7 @@ function App() {
           </SidebarInset>
         </SidebarProvider>
       </BrowserRouter>
+      <Toaster />
     </ThemeProvider>
   );
 }

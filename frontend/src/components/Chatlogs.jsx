@@ -9,35 +9,27 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ReactMarkdown from "react-markdown";
+import { fetchChatLogs } from "./ChatbotApi";
 
 const Chatlogs = () => {
   const [chatLogs, setChatLogs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { accessToken, error } = useAccessToken();
+  const { accessToken } = useAccessToken();
 
   useEffect(() => {
-    // Function to fetch chat logs from the backend
-    const fetchChatLogs = async () => {
+    const getChatLogs = async () => {
       try {
-        const response = await fetch("http://localhost:5001/chatlogs", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch chat logs");
-        }
-        const data = await response.json();
+        const data = await fetchChatLogs(accessToken); // Call the API function
         setChatLogs(data); // Set the retrieved chat logs in state
         setLoading(false); // Set loading state to false after data is loaded
       } catch (error) {
+        console.error("Error fetching chat logs:", error);
         setLoading(false);
       }
     };
-
-    fetchChatLogs();
+    if (accessToken) {
+      getChatLogs(); // Only fetch chat logs if accessToken is available
+    }
   }, [accessToken]);
 
   if (loading) {

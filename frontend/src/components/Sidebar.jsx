@@ -21,17 +21,12 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "./LoginButton";
 import { NavUser } from "./nav-user";
 import { useEffect } from "react";
+import useAccessToken from "@/hooks/useAccessToken";
 
 // Menu items.
 const items = [
@@ -64,10 +59,7 @@ const items = [
 
 export default function AppSidebar() {
   const { user, isAuthenticated, isLoading, logout } = useAuth0();
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
+  const { scopes, error } = useAccessToken();
 
   return (
     <Sidebar>
@@ -76,16 +68,24 @@ export default function AppSidebar() {
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {items.map((item) => {
+                if (
+                  item.title === "Chatlogs" &&
+                  (scopes?.length === 0 || !scopes)
+                ) {
+                  return null;
+                }
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <a href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
