@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { fetchAssignmentData } from "../../api/assignmentApi.js";
 
 const AssignmentPage = () => {
   const { courseId, assignmentId } = useParams();
@@ -18,27 +19,19 @@ const AssignmentPage = () => {
   const { accessToken } = useAccessToken();
 
   useEffect(() => {
-    const fetchAssignmentData = async () => {
-      if (!accessToken) {
-        return;
-      }
+    if (!accessToken) {
+      setError("Access token is missing");
+      setLoading(false);
+      return;
+    }
+
+    const getAssignmentData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:5001/assignments/${courseId}/${assignmentId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
+        const data = await fetchAssignmentData(
+          courseId,
+          assignmentId,
+          accessToken
         );
-
-        if (!response.ok) {
-          throw new Error("Assignment not found");
-        }
-
-        const data = await response.json();
         setAssignmentData(data);
       } catch (err) {
         setError(err.message);
@@ -47,7 +40,7 @@ const AssignmentPage = () => {
       }
     };
 
-    fetchAssignmentData();
+    getAssignmentData();
   }, [courseId, assignmentId, accessToken]);
 
   if (loading) {

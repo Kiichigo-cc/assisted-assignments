@@ -64,15 +64,6 @@ export const Assignment = (sequelize) => {
       type: DataTypes.DATE,
       allowNull: true,
     },
-    // courseId: Foreign key linking the assignment to a course
-    courseId: {
-      type: DataTypes.UUID, // Using UUID for the foreign key
-      allowNull: false,
-      references: {
-        model: "Courses", // Reference to the Course model
-        key: "id", // The primary key in the Course model
-      },
-    },
   });
 };
 
@@ -128,34 +119,6 @@ export const User = (sequelize) => {
       allowNull: true,
       validate: {
         isIn: [["instructor", "student"]], // Ensure the role is either instructor or student
-      },
-    },
-  });
-};
-
-export const UserCourses = (sequelize) => {
-  return sequelize.define("UserCourses", {
-    userId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      references: {
-        model: "Users", // Reference to the User model
-        key: "userId",
-      },
-    },
-    courseId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: "Courses", // Reference to the Course model
-        key: "id",
-      },
-    },
-    role: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        isIn: [["instructor", "student"]],
       },
     },
   });

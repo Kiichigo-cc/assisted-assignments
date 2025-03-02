@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import useAccessToken from "@/hooks/useAccessToken";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { fetchAssignmentTask } from "../../api/assignmentApi.js";
 
 const TaskPage = () => {
   const { courseId, assignmentId, taskId } = useParams(); // Get assignment ID from URL params
@@ -12,37 +13,27 @@ const TaskPage = () => {
   const { accessToken } = useAccessToken();
 
   useEffect(() => {
-    const fetchAssignmentData = async () => {
+    const fetchData = async () => {
       if (!accessToken) {
         return;
       }
-      try {
-        const response = await fetch(
-          `http://localhost:5001/assignments/${courseId}/${assignmentId}/${taskId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
 
-        if (!response.ok) {
-          throw new Error("Task not found");
-        }
+      const { success, data, message } = await fetchAssignmentTask(
+        courseId,
+        assignmentId,
+        taskId,
+        accessToken
+      );
 
-        const data = await response.json();
-        console.log(data);
+      if (success) {
         setTaskData(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+      } else {
+        setError(message);
       }
+      setLoading(false);
     };
 
-    fetchAssignmentData();
+    fetchData();
   }, [courseId, assignmentId, taskId, accessToken]);
 
   if (loading) {

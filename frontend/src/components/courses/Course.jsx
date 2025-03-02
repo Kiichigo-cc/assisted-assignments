@@ -24,6 +24,7 @@ import useAccessToken from "@/hooks/useAccessToken";
 
 import { useAuth0 } from "@auth0/auth0-react";
 import { toast } from "sonner";
+import { createCourse, joinCourse } from "../../api/courseApi";
 
 export function DialogButton({
   buttonLabel,
@@ -110,30 +111,23 @@ export default function Courses() {
 
   const handleSubmit = async () => {
     const newCourse = { courseName, courseId, term, courseNumber };
-    setOpenCourseForm(false);
-    try {
-      const response = await fetch("http://localhost:5001/courses", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ newCourse, user }),
-      });
+    setOpenCourseForm(false); // Close the form
 
-      if (response.ok) {
-        const addedCourse = await response.json();
-        setCourses([...courses, addedCourse]); // Update the courses state with the new course
-        // Clear the form after submission
-        setCourseName("");
-        setCourseId("");
-        setTerm("");
-        setCourseNumber("");
-      } else {
-        console.error("Failed to add course");
-      }
-    } catch (error) {
-      console.error("Error adding course:", error);
+    const { success, addedCourse, message } = await createCourse(
+      newCourse,
+      user,
+      accessToken
+    );
+
+    if (success) {
+      setCourses([...courses, addedCourse]); // Update the courses state with the new course
+      // Clear the form after submission
+      setCourseName("");
+      setCourseId("");
+      setTerm("");
+      setCourseNumber("");
+    } else {
+      console.error(message); // Handle error if course creation failed
     }
   };
 
@@ -165,26 +159,17 @@ export default function Courses() {
   ];
 
   const handleJoinCourse = async () => {
-    try {
-      const response = await fetch("http://localhost:5001/join-course", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ accessCode, user }),
-      });
+    const { success, message } = await joinCourse(
+      accessCode,
+      user,
+      accessToken
+    );
 
-      const data = await response.json();
-      setOpen(false);
-
-      if (response.ok) {
-        toast(`Successfully joined course with code: ${accessCode}`);
-      } else {
-        toast(data.error || "Failed to join the course.");
-      }
-    } catch (error) {
-      toast("An error occurred while joining the course.");
+    if (success) {
+      toast(message);
+      setOpen(false); // Close the form
+    } else {
+      toast(message);
     }
   };
 

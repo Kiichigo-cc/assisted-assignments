@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 
-const checkUser = (req, res, next) => {
+export const checkUser = (req, res, next) => {
   const authHeader = req.headers["authorization"]; // Extract Authorization header
 
   if (!authHeader) {

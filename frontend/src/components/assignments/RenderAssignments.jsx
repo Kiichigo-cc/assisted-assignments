@@ -14,6 +14,7 @@ import { EllipsisVertical } from "lucide-react";
 import AssignmentDialog from "./AssignmentForm";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { deleteAssignment, fetchAssignments } from "../../api/assignmentApi.js";
 
 export function RenderAssignments({ course }) {
   const { accessToken, scopes } = useAccessToken();
@@ -26,25 +27,17 @@ export function RenderAssignments({ course }) {
 
   const handleDelete = async (courseId, assignmentId) => {
     try {
-      const response = await fetch(
-        `http://localhost:5001/assignments/${courseId}/${assignmentId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
+      const { success, assignments, message } = await deleteAssignment(
+        courseId,
+        assignmentId,
+        accessToken
       );
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data.assignments);
-        setAssignments(data.assignments);
+      if (success) {
+        setAssignments(assignments); // Update state with remaining assignments
         toast("Assignment and tasks deleted successfully");
       } else {
-        const error = await response.json();
-        toast(`Failed to delete: ${error.message}`);
+        toast(`Failed to delete: ${message}`);
       }
     } catch (error) {
       toast(`Error: ${error.message}`);
@@ -52,36 +45,27 @@ export function RenderAssignments({ course }) {
   };
 
   useEffect(() => {
-    const fetchAssignments = async () => {
+    const fetchData = async () => {
       if (!accessToken) {
+        setIsLoading(false);
         return;
       }
-      try {
-        const response = await fetch(
-          `http://localhost:5001/assignments/${course.id}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
 
-        if (response.ok) {
-          const data = await response.json();
-          setIsLoading(false);
-          setAssignments(data);
-        } else {
-          setIsLoading(false);
-          console.error("Failed to fetch courses");
-        }
-      } catch (error) {
-        console.error("Error fetching courses:", error);
+      const { success, assignments, message } = await fetchAssignments(
+        course.id,
+        accessToken
+      );
+
+      if (success) {
+        setAssignments(assignments);
+      } else {
+        console.error(message);
       }
+
+      setIsLoading(false);
     };
 
-    fetchAssignments();
+    fetchData();
   }, [accessToken]);
 
   if (isLoading) {

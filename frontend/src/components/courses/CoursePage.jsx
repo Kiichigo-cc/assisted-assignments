@@ -26,6 +26,7 @@ import useAccessToken from "@/hooks/useAccessToken";
 
 import EnrolledUsers from "../EnrolledUsers";
 import { RenderAssignments } from "../assignments/RenderAssignments";
+import { fetchCourse, generateInviteCode } from "../../api/courseApi";
 
 export function CoursePage() {
   const { courseId } = useParams();
@@ -36,58 +37,31 @@ export function CoursePage() {
   const [inviteCode, setInviteCode] = useState(""); // Store invite code
 
   useEffect(() => {
-    if (!accessToken) {
-      return;
-    }
-    const fetchCourseDetails = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5001/courses/${courseId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+    const getCourseDetails = async () => {
+      const result = await fetchCourse(courseId, accessToken);
 
-        const data = await response.json();
-        setCourse(data.course);
-        setEnrolledUsers(data.users);
+      if (result.success) {
+        setCourse(result.course);
+        setEnrolledUsers(result.users);
         setLoading(false);
-      } catch (err) {
-        setError("Course not found or error fetching data");
+      } else {
+        console.error(result.error);
         setLoading(false);
       }
     };
 
-    fetchCourseDetails();
+    if (accessToken) {
+      getCourseDetails();
+    }
   }, [courseId, accessToken]);
 
-  const generateInviteCode = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:5001/generate-access-code",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({ courseId }), // Pass the courseId
-        }
-      );
+  const handleGenerateInviteCode = async () => {
+    const result = await generateInviteCode(courseId, accessToken);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setInviteCode(data.accessCode); // Set the generated invite code
-      } else {
-        console.log("error");
-      }
-    } catch (err) {
-      console.log("error");
+    if (result.success) {
+      setInviteCode(result.accessCode);
+    } else {
+      console.error(result.error);
     }
   };
 
@@ -105,7 +79,7 @@ export function CoursePage() {
           {scopes?.length === 0 || !scopes ? null : (
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="ml-auto" onClick={generateInviteCode}>
+                <Button className="ml-auto" onClick={handleGenerateInviteCode}>
                   Invite Code
                 </Button>
               </DialogTrigger>

@@ -19,7 +19,6 @@ const useAccessToken = () => {
             scope: "read:current_user",
           },
         });
-        console.log(token);
         setAccessToken(token);
         setScopes(jwtDecode(token).permissions);
       } catch (e) {

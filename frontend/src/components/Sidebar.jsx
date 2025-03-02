@@ -61,10 +61,6 @@ export default function AppSidebar() {
   const { user, isAuthenticated, isLoading, logout } = useAuth0();
   const { scopes, error } = useAccessToken();
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   return (
     <Sidebar>
       <SidebarContent>

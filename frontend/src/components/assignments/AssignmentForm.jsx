@@ -33,6 +33,7 @@ import {
 
 import { X } from "lucide-react";
 import { Textarea } from "../ui/textarea";
+import { createAssignment } from "../../api/assignmentApi.js";
 
 const AssignmentDialog = ({ updateAssignments }) => {
   const { courseId } = useParams();
@@ -71,7 +72,7 @@ const AssignmentDialog = ({ updateAssignments }) => {
     return combinedDateTime;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Combine the date and time for each task
@@ -102,26 +103,13 @@ const AssignmentDialog = ({ updateAssignments }) => {
       tasks: updatedTasks, // Use updated tasks with combined dueDate and dueTime
     };
 
-    // POST request to the backend API using fetch
-    fetch(`http://localhost:5001/assignments/${courseId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json()) // Parse the JSON response
-      .then((data) => {
-        setOpen(false);
-        console.log("Assignment and tasks created successfully:", data);
-
-        updateAssignments(data);
-      })
-      .catch((error) => {
-        console.error("Error creating assignment and tasks:", error);
-        // Handle error (e.g., show an error message)
-      });
+    try {
+      const data = await createAssignment(courseId, accessToken, formData);
+      setOpen(false);
+      updateAssignments(data);
+    } catch (error) {
+      console.error("Error creating assignment and tasks:", error);
+    }
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
