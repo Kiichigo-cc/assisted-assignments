@@ -23,6 +23,7 @@ import { Link } from "react-router-dom";
 import useAccessToken from "@/hooks/useAccessToken";
 
 import { useAuth0 } from "@auth0/auth0-react";
+import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
 import { toast } from "sonner";
 import { createCourse, joinCourse } from "../../api/courseApi";
 
@@ -67,6 +68,9 @@ export function DialogButton({
 }
 
 export default function Courses() {
+  const resetBreadcrumbs = useBreadcrumbStore(
+    (state) => state.resetBreadcrumbs
+  );
   const [courses, setCourses] = useState([]);
   const [courseName, setCourseName] = useState("");
   const [courseId, setCourseId] = useState("");
@@ -97,6 +101,7 @@ export default function Courses() {
           const data = await response.json();
           setIsLoading(false);
           setCourses(data); // Update the state with the fetched courses
+          resetBreadcrumbs();
         } else {
           setIsLoading(false);
           console.error("Failed to fetch courses");

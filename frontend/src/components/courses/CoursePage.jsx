@@ -27,6 +27,8 @@ import useAccessToken from "@/hooks/useAccessToken";
 import EnrolledUsers from "../EnrolledUsers";
 import { RenderAssignments } from "../assignments/RenderAssignments";
 import { fetchCourse, generateInviteCode } from "../../api/courseApi";
+import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
+import InstructorAccess from "../user-permissions/InstructorAccess";
 
 export function CoursePage() {
   const { courseId } = useParams();
@@ -36,6 +38,8 @@ export function CoursePage() {
   const [enrolledUsers, setEnrolledUsers] = useState(null);
   const [inviteCode, setInviteCode] = useState(""); // Store invite code
 
+  const setBreadcrumbs = useBreadcrumbStore((state) => state.setBreadcrumbs);
+
   useEffect(() => {
     const getCourseDetails = async () => {
       const result = await fetchCourse(courseId, accessToken);
@@ -43,6 +47,7 @@ export function CoursePage() {
       if (result.success) {
         setCourse(result.course);
         setEnrolledUsers(result.users);
+        setBreadcrumbs(courseId, result.course.courseName, null, "", null, "");
         setLoading(false);
       } else {
         console.error(result.error);

@@ -4,6 +4,7 @@ import useAccessToken from "@/hooks/useAccessToken";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { fetchAssignmentTask } from "../../api/assignmentApi.js";
+import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
 
 const TaskPage = () => {
   const { courseId, assignmentId, taskId } = useParams(); // Get assignment ID from URL params
@@ -11,6 +12,7 @@ const TaskPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { accessToken } = useAccessToken();
+  const setBreadcrumbs = useBreadcrumbStore((state) => state.setBreadcrumbs);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +29,14 @@ const TaskPage = () => {
 
       if (success) {
         setTaskData(data);
+        setBreadcrumbs(
+          courseId,
+          data.assignment.course.courseName,
+          assignmentId,
+          data.assignment.name,
+          taskId,
+          data.title
+        );
       } else {
         setError(message);
       }

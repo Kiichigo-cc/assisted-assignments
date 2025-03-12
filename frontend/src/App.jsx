@@ -20,19 +20,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/theme-provider";
 import { Separator } from "@/components/ui/separator";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/user-permissions/ProtectedRoute";
 import Chatlogs from "./components/Chatlogs";
 import { Toaster } from "@/components/ui/sonner";
 import AssignmentPage from "./components/assignments/AssignmentPage";
 import TaskPage from "./components/assignments/TaskPage";
+import DynamicBreadcrumb from "./components/nav-breadcrumb";
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
@@ -72,19 +65,7 @@ function App() {
               <div className="flex items-center gap-2 px-4">
                 <SidebarTrigger className="-ml-1" />
                 <Separator orientation="vertical" className="mr-2 h-4" />
-                {/* <Breadcrumb>
-                  <BreadcrumbList>
-                    <BreadcrumbItem className="hidden md:block">
-                      <BreadcrumbLink href="#">
-                        Building Your Application
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator className="hidden md:block" />
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb> */}
+                <DynamicBreadcrumb />
               </div>
             </header>
             <div className="w-full p-8">

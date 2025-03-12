@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { fetchAssignmentData } from "../../api/assignmentApi.js";
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
+import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
 import { useNavigate } from "react-router-dom";
 
 const AssignmentPage = () => {
@@ -21,6 +22,7 @@ const AssignmentPage = () => {
   const [error, setError] = useState(null);
   const { accessToken } = useAccessToken();
   const navigate = useNavigate();
+  const setBreadcrumbs = useBreadcrumbStore((state) => state.setBreadcrumbs);
 
   const handleChatbotClick = () => {
     const encodedPurpose = encodeURIComponent(assignmentData.purpose || "N/A");
@@ -43,6 +45,7 @@ const AssignmentPage = () => {
           accessToken
         );
         setAssignmentData(data);
+        setBreadcrumbs(courseId, data.course.courseName, assignmentId, data.name, null, "");
       } catch (err) {
         setError(err.message);
       } finally {
