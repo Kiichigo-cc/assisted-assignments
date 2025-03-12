@@ -1,3 +1,5 @@
+import { getAssignmentById } from "../queries/assignmentQueries.js";
+import { getAllCourses } from "../queries/courseQueries.js";
 import { ChatLogModel } from "../server.js";
 import { AssignmentModel } from "../server.js";
 import { genAI, model } from "../server.js";
@@ -10,14 +12,19 @@ export const chat = async (req, res) => {
     const userMessage = req.body.message;
     const assignmentId = req.body.assignmentId;
     //const assignmentContext = req.body.assignmentContext;
-    let assignmentContext = req.body.assignmentContext;
+    let assignmentContext;
     console.log("Received assignment context:", assignmentContext);
 
     if (assignmentId) {
       // Fetch assignment details
-      const assignment = await AssignmentModel.findByPk(assignmentId);
+      const assignment = await getAssignmentById(assignmentId);
       if (assignment) {
-        assignmentContext = `Assignment: ${assignment.name}\nPurpose: ${assignment.purpose}\nInstructions: ${assignment.instructions}\n`;
+        assignmentContext = `Assignment: ${assignment.name}\nPurpose: ${assignment.purpose}\nInstructions: ${assignment.instructions}\n
+        Submission Details: ${
+          assignment.submission
+        }\nGrading Criteria: ${assignment.grading}\nPoints: ${
+          assignment.points
+        }\nDue Date: ${assignment.dueDate}\nTasks: ${assignment.tasks.map(task => JSON.stringify(task)).join(", ")}`;
       }
     }
     console.log("Received assignment context:", assignmentContext);
@@ -59,6 +66,7 @@ export const chat = async (req, res) => {
       userName: userName,
       message: userMessage,
       sender: "user",
+      ...(assignmentId && { assignmentId })
     });
 
     await ChatLogModel.create({
@@ -67,6 +75,7 @@ export const chat = async (req, res) => {
       userName: "TD3A AI",
       message: reply,
       sender: "system",
+      ...(assignmentId && { assignmentId })
     });
 
     res.json({ reply });

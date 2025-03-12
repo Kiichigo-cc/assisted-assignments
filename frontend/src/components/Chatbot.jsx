@@ -18,13 +18,13 @@ export default function Chatbot() {
 
   const urlParams = new URLSearchParams(search);
   const assignmentId = urlParams.get("assignmentId");
-  const purpose = urlParams.get("purpose");
-  const instructions = urlParams.get("instructions");
+  // const purpose = urlParams.get("purpose");
+  // const instructions = urlParams.get("instructions");
 
   const assignmentContext = {
     assignmentId,
-    purpose,
-    instructions,
+    // purpose,
+    // instructions,
   };
 
   const handleSendMessage = async () => {

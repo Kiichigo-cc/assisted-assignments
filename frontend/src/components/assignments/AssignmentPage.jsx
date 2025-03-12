@@ -27,7 +27,7 @@ const AssignmentPage = () => {
   const handleChatbotClick = () => {
     const encodedPurpose = encodeURIComponent(assignmentData.purpose || "N/A");
     const encodedInstructions = encodeURIComponent(assignmentData.instructions || "N/A");
-    navigate(`/chatbot?assignmentId=${assignmentId}&purpose=${encodedPurpose}&instructions=${encodedInstructions}`);
+    navigate(`/chatbot?assignmentId=${assignmentId}`);
   };
 
   useEffect(() => {
