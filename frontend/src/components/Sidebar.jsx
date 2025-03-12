@@ -25,7 +25,6 @@ import {
 import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "./LoginButton";
 import { NavUser } from "./nav-user";
-import { useEffect } from "react";
 import useAccessToken from "@/hooks/useAccessToken";
 
 // Menu items.
@@ -40,11 +39,11 @@ const items = [
     url: "/courses",
     icon: Book,
   },
-  {
-    title: "Chatbot",
-    url: "/chatbot",
-    icon: MessageCircle,
-  },
+  // {
+  //   title: "Chatbot",
+  //   url: "/chatbot",
+  //   icon: MessageCircle,
+  // },
   {
     title: "Chatlogs",
     url: "/chatlogs",
@@ -58,8 +57,8 @@ const items = [
 ];
 
 export default function AppSidebar() {
-  const { user, isAuthenticated, isLoading, logout } = useAuth0();
-  const { scopes, error } = useAccessToken();
+  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { scopes } = useAccessToken();
 
   return (
     <Sidebar>

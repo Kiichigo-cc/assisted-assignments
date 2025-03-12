@@ -33,21 +33,35 @@ import {
 
 import { X } from "lucide-react";
 import { Textarea } from "../ui/textarea";
-import { createAssignment } from "../../api/assignmentApi.js";
+import { createAssignment, updateAssignment } from "../../api/assignmentApi.js";
 
-const AssignmentDialog = ({ updateAssignments }) => {
+const AssignmentDialog = ({
+  updateAssignments,
+  _tasks = [],
+  _points = 0,
+  _name = "",
+  _purpose = "",
+  _instructions = "",
+  _submission = "",
+  _grading = "",
+  _date = null,
+  _time = "",
+  _open = false,
+  assignmentId = null,
+  children,
+}) => {
   const { courseId } = useParams();
-  const [tasks, setTasks] = useState([]);
-  const [points, setPoints] = useState(0);
-  const [name, setName] = useState("");
-  const [purpose, setPurpose] = useState("");
-  const [instructions, setInstructions] = useState("");
-  const [submission, setSubmission] = useState("");
-  const [grading, setGrading] = useState("");
-  const [date, setDate] = useState(null);
-  const [time, setTime] = useState("");
+  const [tasks, setTasks] = useState(_tasks);
+  const [points, setPoints] = useState(_points);
+  const [name, setName] = useState(_name);
+  const [purpose, setPurpose] = useState(_purpose);
+  const [instructions, setInstructions] = useState(_instructions);
+  const [submission, setSubmission] = useState(_submission);
+  const [grading, setGrading] = useState(_grading);
+  const [date, setDate] = useState(_date);
+  const [time, setTime] = useState(_time);
   const { accessToken } = useAccessToken();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(_open);
   const handleTaskChange = (index, field, value) => {
     const newTasks = [...tasks];
     newTasks[index][field] = value;
@@ -104,7 +118,19 @@ const AssignmentDialog = ({ updateAssignments }) => {
     };
 
     try {
-      const data = await createAssignment(courseId, accessToken, formData);
+      let data;
+
+      if (assignmentId) {
+        data = await updateAssignment(
+          courseId,
+          assignmentId,
+          accessToken,
+          formData
+        );
+      } else {
+        data = await createAssignment(courseId, accessToken, formData);
+      }
+
       setOpen(false);
       updateAssignments(data);
     } catch (error) {
@@ -113,12 +139,12 @@ const AssignmentDialog = ({ updateAssignments }) => {
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="ml-auto">+ Add Assignment</Button>
-      </DialogTrigger>
+      {children}
       <DialogContent className="sm:max-w-[925px] max-h-[90vh] overflow-auto">
         <DialogHeader>
-          <DialogTitle>Add Assignment</DialogTitle>
+          <DialogTitle>
+            {assignmentId ? "Edit Assignment" : "Add Assignment"}
+          </DialogTitle>
         </DialogHeader>
         <div>
           <div className="">

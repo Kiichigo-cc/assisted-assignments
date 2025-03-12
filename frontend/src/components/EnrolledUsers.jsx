@@ -15,7 +15,6 @@ export function EnrolledUsers({ users }) {
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">Name</TableHead>
-          <TableHead className="text-right">Role</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -29,11 +28,6 @@ export function EnrolledUsers({ users }) {
                 </Avatar>
                 <div className="font-medium">{user.name}</div>
               </div>
-            </TableCell>
-            <TableCell className="text-right">
-              {user.role
-                ? user?.role?.charAt(0).toUpperCase() + user.role.slice(1)
-                : ""}
             </TableCell>
           </TableRow>
         ))}

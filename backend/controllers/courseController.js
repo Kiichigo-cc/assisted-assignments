@@ -1,10 +1,11 @@
-import { UserModel } from "../server.js";
+import { UserModel, TaskModel, AssignmentModel } from "../server.js";
 import {
   createNewCourse,
   getCourseById,
   getAllCourses,
   getUsersInCourse,
 } from "../queries/courseQueries.js";
+import { getAssignmentByCourseId } from "../queries/assignmentQueries.js";
 
 export const createCourse = async (req, res) => {
   try {
@@ -64,5 +65,55 @@ export const getCourses = async (req, res) => {
   } catch (error) {
     console.error("Error fetching courses:", error);
     res.status(500).json({ error: "Failed to fetch courses" });
+  }
+};
+
+export const deleteCourse = async (req, res) => {
+  const { id: courseId } = req.params;
+
+  console.log("courseId", courseId);
+
+  try {
+    // Fetch the course by courseId
+    const course = await getCourseById(courseId);
+
+    console.log("course", course);
+
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+
+    // Fetch all assignments associated with the course
+    const assignments = await getAssignmentByCourseId(courseId);
+
+    console.log("assignments", assignments);
+
+    if (assignments.length > 0) {
+      // Delete all tasks associated with the assignments
+      for (const assignment of assignments) {
+        await TaskModel.destroy({
+          where: {
+            assignmentId: assignment.id,
+          },
+        });
+      }
+
+      // Delete all assignments associated with the course
+      await AssignmentModel.destroy({
+        where: {
+          courseId: course.id,
+        },
+      });
+    }
+
+    // Delete the course itself
+    await course.destroy();
+
+    return res.status(200).json({
+      message: "Course, assignments, and tasks deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to delete course" });
   }
 };

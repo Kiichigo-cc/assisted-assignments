@@ -131,3 +131,33 @@ export const fetchAssignmentTask = async (
     return { success: false, message: error.message }; // Return error message if the fetch fails
   }
 };
+
+export const updateAssignment = async (
+  courseId,
+  assignmentId,
+  accessToken,
+  formData
+) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5001/assignments/${courseId}/${assignmentId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update assignment");
+    }
+
+    const data = await response.json();
+    return data; // Return the response data for further use
+  } catch (error) {
+    throw new Error("Error creating assignment: " + error.message);
+  }
+};

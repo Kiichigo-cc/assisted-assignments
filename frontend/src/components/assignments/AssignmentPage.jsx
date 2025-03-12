@@ -12,7 +12,9 @@ import { Separator } from "@/components/ui/separator";
 import { fetchAssignmentData } from "../../api/assignmentApi.js";
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
+import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
 import { useNavigate } from "react-router-dom";
+import StudentActivitySheet from "./StudentActivitySheet.jsx";
 
 const AssignmentPage = () => {
   const { courseId, assignmentId } = useParams();
@@ -21,11 +23,12 @@ const AssignmentPage = () => {
   const [error, setError] = useState(null);
   const { accessToken } = useAccessToken();
   const navigate = useNavigate();
+  const setBreadcrumbs = useBreadcrumbStore((state) => state.setBreadcrumbs);
 
   const handleChatbotClick = () => {
     const encodedPurpose = encodeURIComponent(assignmentData.purpose || "N/A");
     const encodedInstructions = encodeURIComponent(assignmentData.instructions || "N/A");
-    navigate(`/chatbot?assignmentId=${assignmentId}&purpose=${encodedPurpose}&instructions=${encodedInstructions}`);
+    navigate(`/chatbot?assignmentId=${assignmentId}`);
   };
 
   useEffect(() => {
@@ -43,6 +46,7 @@ const AssignmentPage = () => {
           accessToken
         );
         setAssignmentData(data);
+        setBreadcrumbs(courseId, data.course.courseName, assignmentId, data.name, null, "");
       } catch (err) {
         setError(err.message);
       } finally {
@@ -63,8 +67,20 @@ const AssignmentPage = () => {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-col">
         <CardTitle>{assignmentData.name}</CardTitle>
+        <div className="py-2 space-x-2 flex flex-row">
+          <Link to={`/chatbot?assignmentId=${assignmentData.id}`}>
+            <Button>
+              <MessageCircle className="mr-2" />
+              Ask Chatbot
+            </Button>
+          </Link>
+          <StudentActivitySheet
+            users={assignmentData.course.users}
+            assignmentId={assignmentId}
+          />
+        </div>
       </CardHeader>
       <CardContent>
         {assignmentData ? (
@@ -146,10 +162,6 @@ const AssignmentPage = () => {
           <p>No assignment data available.</p>
         )}
       </CardContent>
-      <Button onClick={handleChatbotClick} variant="outline">
-            <MessageCircle className="mr-2" />
-            Ask Chatbot
-          </Button>
     </Card>
   );
 };

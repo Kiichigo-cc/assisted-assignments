@@ -23,8 +23,18 @@ import { Link } from "react-router-dom";
 import useAccessToken from "@/hooks/useAccessToken";
 
 import { useAuth0 } from "@auth0/auth0-react";
+import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
 import { toast } from "sonner";
-import { createCourse, joinCourse } from "../../api/courseApi";
+import { createCourse, deleteCourse, joinCourse } from "../../api/courseApi";
+import { EllipsisVertical } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import InstructorAccess from "../user-permissions/InstructorAccess";
 
 export function DialogButton({
   buttonLabel,
@@ -67,17 +77,21 @@ export function DialogButton({
 }
 
 export default function Courses() {
+  const resetBreadcrumbs = useBreadcrumbStore(
+    (state) => state.resetBreadcrumbs
+  );
   const [courses, setCourses] = useState([]);
   const [courseName, setCourseName] = useState("");
   const [courseId, setCourseId] = useState("");
   const [term, setTerm] = useState("");
   const [courseNumber, setCourseNumber] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const { accessToken, scopes } = useAccessToken();
+  const { accessToken } = useAccessToken();
   const { user } = useAuth0();
   const [accessCode, setAccessCode] = useState(""); // State for the input field
   const [open, setOpen] = useState(false);
   const [openCourseForm, setOpenCourseForm] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -97,6 +111,7 @@ export default function Courses() {
           const data = await response.json();
           setIsLoading(false);
           setCourses(data); // Update the state with the fetched courses
+          resetBreadcrumbs();
         } else {
           setIsLoading(false);
           console.error("Failed to fetch courses");
@@ -173,21 +188,73 @@ export default function Courses() {
     }
   };
 
+  const handleDelete = async (courseId) => {
+    const { success, message } = await deleteCourse(courseId, accessToken);
+
+    if (success) {
+      const updatedCourses = courses.filter((course) => course.id !== courseId);
+      setCourses(updatedCourses);
+      setOpenDeleteDialog(false);
+      toast("Course deleted successfully");
+    } else {
+      toast("Issue deleting course");
+    }
+  };
+
   const renderCourses = () => {
     return isLoading ? (
       <div>Loading</div>
     ) : (
       courses.map((course) => (
-        <Link to={`/courses/${course.id}`} key={course.id} className="block">
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow duration-300">
-            <CardHeader>
+        <Card className="flex flex-row items-center py-2 px-4">
+          <CardHeader>
+            <Link
+              to={`/courses/${course.id}`}
+              key={course.id}
+              className="block hover:underline"
+            >
               <CardTitle>
                 {course.courseNumber} - {course.courseName}
               </CardTitle>
-              <CardDescription>Term: {course.term}</CardDescription>
-            </CardHeader>
-          </Card>
-        </Link>
+            </Link>
+            <CardDescription>Term: {course.term}</CardDescription>
+          </CardHeader>
+          <Dialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <EllipsisVertical
+                  className="ml-auto cursor-pointer"
+                  size={18}
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>Edit</DropdownMenuItem>
+                  <DialogTrigger asChild>
+                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                  </DialogTrigger>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                <DialogDescription>
+                  This action cannot be undone. This will permanently delete the
+                  course and remove the data from our servers.
+                </DialogDescription>
+                <DialogFooter>
+                  <Button
+                    onClick={() => handleDelete(course.id)}
+                    variant="destructive"
+                  >
+                    Delete
+                  </Button>
+                </DialogFooter>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        </Card>
       ))
     );
   };
@@ -197,7 +264,7 @@ export default function Courses() {
       <CardHeader className="flex flex-row items-center">
         <CardTitle>Courses</CardTitle>
         <div className="ml-auto space-x-2">
-          {scopes?.length === 0 || !scopes ? null : (
+          <InstructorAccess>
             <Dialog open={openCourseForm} onOpenChange={setOpenCourseForm}>
               <DialogTrigger asChild>
                 <Button className="ml-auto">+ Add Course</Button>
@@ -228,7 +295,7 @@ export default function Courses() {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-          )}
+          </InstructorAccess>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button className="ml-auto">Join a Course</Button>

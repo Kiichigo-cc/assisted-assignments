@@ -36,17 +36,34 @@ CourseModel.hasMany(AssignmentModel, {
   foreignKey: "courseId",
   as: "assignments",
 });
-AssignmentModel.belongsTo(CourseModel, { foreignKey: "courseId" });
+AssignmentModel.belongsTo(CourseModel, {
+  foreignKey: "courseId",
+  as: "course",
+});
 
 AssignmentModel.hasMany(TaskModel, { foreignKey: "assignmentId", as: "tasks" });
-TaskModel.belongsTo(AssignmentModel, { foreignKey: "assignmentId" });
+TaskModel.belongsTo(AssignmentModel, {
+  foreignKey: "assignmentId",
+  as: "assignment",
+});
 
 CourseModel.belongsToMany(UserModel, {
   through: "UserCourses",
+  as: "users",
 });
 
 UserModel.belongsToMany(CourseModel, {
   through: "UserCourses",
+  as: "courses",
+});
+
+AssignmentModel.hasMany(ChatLogModel, {
+  foreignKey: "assignmentId",
+  as: "chatLogs",
+});
+ChatLogModel.belongsTo(AssignmentModel, {
+  foreignKey: "assignmentId",
+  as: "assignment",
 });
 
 export { ChatLogModel, CourseModel, AssignmentModel, TaskModel, UserModel };

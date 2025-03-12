@@ -27,14 +27,18 @@ import useAccessToken from "@/hooks/useAccessToken";
 import EnrolledUsers from "../EnrolledUsers";
 import { RenderAssignments } from "../assignments/RenderAssignments";
 import { fetchCourse, generateInviteCode } from "../../api/courseApi";
+import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
+import InstructorAccess from "../user-permissions/InstructorAccess";
 
 export function CoursePage() {
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { accessToken, scopes } = useAccessToken();
+  const { accessToken } = useAccessToken();
   const [enrolledUsers, setEnrolledUsers] = useState(null);
   const [inviteCode, setInviteCode] = useState(""); // Store invite code
+
+  const setBreadcrumbs = useBreadcrumbStore((state) => state.setBreadcrumbs);
 
   useEffect(() => {
     const getCourseDetails = async () => {
@@ -43,6 +47,7 @@ export function CoursePage() {
       if (result.success) {
         setCourse(result.course);
         setEnrolledUsers(result.users);
+        setBreadcrumbs(courseId, result.course.courseName, null, "", null, "");
         setLoading(false);
       } else {
         console.error(result.error);
@@ -76,7 +81,7 @@ export function CoursePage() {
           <CardTitle>
             {course.courseNumber} - {course.courseName} {`(${course.term})`}
           </CardTitle>
-          {scopes?.length === 0 || !scopes ? null : (
+          <InstructorAccess>
             <Dialog>
               <DialogTrigger asChild>
                 <Button className="ml-auto" onClick={handleGenerateInviteCode}>
@@ -107,9 +112,8 @@ export function CoursePage() {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-          )}
+          </InstructorAccess>
         </div>
-        <CardDescription>Placeholder for description</CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="assignments" className="w-[100%]">

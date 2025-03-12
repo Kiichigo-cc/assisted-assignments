@@ -41,7 +41,7 @@ export const getCourseById = async (courseId) => {
           },
         ],
       },
-      { model: UserModel },
+      { model: UserModel, as: "users" },
     ],
   });
 };
@@ -52,6 +52,7 @@ export const getAllCourses = async (userId) => {
     include: [
       {
         model: UserModel,
+        as: "users",
         where: { userId },
         required: true,
       },
@@ -75,6 +76,7 @@ export const getUsersInCourse = async (courseId) => {
     include: [
       {
         model: CourseModel,
+        as: "courses",
         where: {
           id: courseId,
         },

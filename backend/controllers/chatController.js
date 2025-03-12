@@ -1,3 +1,5 @@
+import { getAssignmentById } from "../queries/assignmentQueries.js";
+import { getAllCourses } from "../queries/courseQueries.js";
 import { ChatLogModel } from "../server.js";
 import { AssignmentModel } from "../server.js";
 import { genAI, model } from "../server.js";
@@ -10,14 +12,19 @@ export const chat = async (req, res) => {
     const userMessage = req.body.message;
     const assignmentId = req.body.assignmentId;
     //const assignmentContext = req.body.assignmentContext;
-    let assignmentContext = req.body.assignmentContext;
+    let assignmentContext;
     console.log("Received assignment context:", assignmentContext);
 
     if (assignmentId) {
       // Fetch assignment details
-      const assignment = await AssignmentModel.findByPk(assignmentId);
+      const assignment = await getAssignmentById(assignmentId);
       if (assignment) {
-        assignmentContext = `Assignment: ${assignment.name}\nPurpose: ${assignment.purpose}\nInstructions: ${assignment.instructions}\n`;
+        assignmentContext = `Assignment: ${assignment.name}\nPurpose: ${assignment.purpose}\nInstructions: ${assignment.instructions}\n
+        Submission Details: ${
+          assignment.submission
+        }\nGrading Criteria: ${assignment.grading}\nPoints: ${
+          assignment.points
+        }\nDue Date: ${assignment.dueDate}\nTasks: ${assignment.tasks.map(task => JSON.stringify(task)).join(", ")}`;
       }
     }
     console.log("Received assignment context:", assignmentContext);
@@ -59,6 +66,7 @@ export const chat = async (req, res) => {
       userName: userName,
       message: userMessage,
       sender: "user",
+      ...(assignmentId && { assignmentId })
     });
 
     await ChatLogModel.create({
@@ -67,6 +75,7 @@ export const chat = async (req, res) => {
       userName: "TD3A AI",
       message: reply,
       sender: "system",
+      ...(assignmentId && { assignmentId })
     });
 
     res.json({ reply });
@@ -76,9 +85,10 @@ export const chat = async (req, res) => {
   }
 };
 
-export const getChatLogs = async (req, res) => {
+export const getInstructorChatLogs = async (req, res) => {
   try {
-    const { userId, limit = 100, offset = 0 } = req.query;
+    const instructorId = req.user.sub;
+    const { userId, assignmentId, limit = 100, offset = 0 } = req.query;
 
     // Build query options
     const queryOptions = {
@@ -88,9 +98,55 @@ export const getChatLogs = async (req, res) => {
       order: [["timestamp", "ASC"]],
     };
 
+    const courses = await getAllCourses(instructorId);
+
+    if (courses.length === 0) {
+      return res
+        .status(403)
+        .json({ error: "Instructor is not part of any courses" });
+    }
+
+    const courseAssignments = courses.flatMap(
+      (course) => course.assignments?.map((assignment) => assignment.id) ?? []
+    );
+
+    queryOptions.where.assignmentId = courseAssignments;
+
+    if (assignmentId && courseAssignments.includes(parseInt(assignmentId))) {
+      queryOptions.where.assignmentId = assignmentId;
+    }
+
     if (userId) {
       queryOptions.where.userId = userId;
     }
+
+    const chatLogs = await ChatLogModel.findAll(queryOptions);
+
+    res.json(chatLogs);
+  } catch (error) {
+    console.error("Error retrieving chat logs:", error);
+    res.status(500).json({ error: "Failed to retrieve chat logs" });
+  }
+};
+
+export const getUserChatLogs = async (req, res) => {
+  try {
+    const userId = req.user.sub;
+    const { assignmentId, limit = 100, offset = 0 } = req.query;
+
+    // Build query options
+    const queryOptions = {
+      where: {},
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+      order: [["timestamp", "ASC"]],
+    };
+
+    if (assignmentId) {
+      queryOptions.where.assignmentId = assignmentId;
+    }
+
+    queryOptions.where.userId = userId;
 
     const chatLogs = await ChatLogModel.findAll(queryOptions);
 

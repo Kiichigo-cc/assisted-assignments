@@ -1,4 +1,9 @@
-import { AssignmentModel, TaskModel } from "../server.js";
+import {
+  AssignmentModel,
+  TaskModel,
+  CourseModel,
+  UserModel,
+} from "../server.js";
 
 //get assignment by its id
 export const getAssignmentById = async (assignmentId) => {
@@ -8,6 +13,18 @@ export const getAssignmentById = async (assignmentId) => {
       {
         model: TaskModel,
         as: "tasks", // Include associated tasks
+      },
+      {
+        model: CourseModel, // Include associated course
+        as: "course", // Alias defined in the association
+        include: [
+          {
+            model: UserModel, // Include users associated with the course
+            as: "users", // Alias for users
+            through: { attributes: [] }, // To avoid including the "through" table
+            required: true,
+          },
+        ],
       },
     ],
   });
@@ -21,6 +38,36 @@ export const getAssignmentByCourseId = async (courseId) => {
       {
         model: TaskModel,
         as: "tasks", // Include associated tasks
+      },
+      {
+        model: CourseModel, // Include associated course
+        as: "course", // Alias defined in the association
+        include: [
+          {
+            model: UserModel, // Include users associated with the course
+            as: "users", // Alias for users
+            through: { attributes: [] }, // To avoid including the "through" table
+            required: true,
+          },
+        ],
+      },
+    ],
+  });
+};
+
+export const getTaskById = async (taskId) => {
+  return await TaskModel.findOne({
+    where: { id: taskId },
+    include: [
+      {
+        model: AssignmentModel, // Include the related Assignment
+        as: "assignment", // The alias for the relationship between Task and Assignment
+        include: [
+          {
+            model: CourseModel, // Include the related Course
+            as: "course", // The alias for the relationship between Assignment and Course
+          },
+        ],
       },
     ],
   });

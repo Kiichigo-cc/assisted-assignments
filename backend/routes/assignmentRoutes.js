@@ -4,6 +4,7 @@ import {
   createAssignment,
   deleteAssignment,
   getTask,
+  editAssignment,
 } from "../controllers/assignmentController.js";
 import { instructorScopes } from "../middleware/checkInstructorScopes.js";
 import { checkJwt } from "../middleware/checkJwt.js";
@@ -26,5 +27,13 @@ router.delete(
 
 // GET route to fetch a specific task by ID
 router.get("/:courseId/:assignmentId/:taskId", checkJwt, getTask);
+
+// POST route to edit an assignment
+router.post(
+  "/:courseId/:assignmentId",
+  checkJwt,
+  instructorScopes,
+  editAssignment
+);
 
 export default router;
