@@ -1,6 +1,7 @@
 import {
   getAssignmentByCourseId,
   getAssignmentById,
+  getTaskById,
 } from "../queries/assignmentQueries.js";
 import { AssignmentModel, TaskModel } from "../server.js";
 
@@ -101,13 +102,71 @@ export const deleteAssignment = async (req, res) => {
   }
 };
 
+export const editAssignment = async (req, res) => {
+  const { courseId, assignmentId } = req.params;
+  const {
+    name,
+    purpose,
+    instructions,
+    submission,
+    grading,
+    points,
+    dueDate,
+    tasks,
+  } = req.body;
+
+  try {
+    // Fetch the assignment to edit
+    const assignment = await getAssignmentById(assignmentId);
+
+    if (!assignment) {
+      return res.status(404).json({ error: "Assignment not found" });
+    }
+
+    // Replace the assignment data with the new data from the request body
+    assignment.name = name;
+    assignment.purpose = purpose;
+    assignment.instructions = instructions;
+    assignment.submission = submission;
+    assignment.grading = grading;
+    assignment.points = points;
+    assignment.dueDate = dueDate;
+
+    // Save the updated assignment (this will replace the old assignment with the new one)
+    await assignment.save();
+
+    // If there are tasks, delete existing ones and create the new tasks
+    await TaskModel.destroy({
+      where: {
+        assignmentId: assignment.id,
+      },
+    });
+
+    if (tasks && tasks.length > 0) {
+      const taskPromises = tasks.map((task) =>
+        TaskModel.create({
+          ...task,
+          assignmentId: assignment.id, // Link the task to the updated assignment
+        })
+      );
+      await Promise.all(taskPromises);
+    }
+
+    // Fetch all assignments for the course after update
+    const assignments = await getAssignmentByCourseId(courseId);
+
+    return res.status(200).json(assignments);
+  } catch (error) {
+    console.error("Error updating assignment:", error);
+    return res.status(500).json({ error: "Failed to update assignment" });
+  }
+};
+
 export const getTask = async (req, res) => {
   const { taskId } = req.params;
 
   try {
-    const task = await TaskModel.findOne({
-      where: { id: taskId },
-    });
+    const task = await getTaskById(taskId);
 
     if (!task) {
       return res.status(404).json({ error: "Task not found" });
@@ -115,6 +174,6 @@ export const getTask = async (req, res) => {
 
     return res.status(200).json(task);
   } catch (error) {
-    return res.status(500).json({ error: "Failed to fetch task" });
+    return res.status(500).json({ error: error });
   }
 };
