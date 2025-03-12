@@ -41,6 +41,26 @@ export const fetchCourse = async (courseId, accessToken) => {
   }
 };
 
+export const deleteCourse = async (courseId, accessToken) => {
+  try {
+    const response = await fetch(`http://localhost:5001/courses/${courseId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete course");
+    }
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};
+
 export const joinCourse = async (accessCode, user, accessToken) => {
   try {
     const response = await fetch("http://localhost:5001/join-course", {
