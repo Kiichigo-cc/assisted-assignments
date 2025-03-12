@@ -85,9 +85,10 @@ export const chat = async (req, res) => {
   }
 };
 
-export const getChatLogs = async (req, res) => {
+export const getInstructorChatLogs = async (req, res) => {
   try {
-    const { userId, limit = 100, offset = 0 } = req.query;
+    const instructorId = req.user.sub;
+    const { userId, assignmentId, limit = 100, offset = 0 } = req.query;
 
     // Build query options
     const queryOptions = {
@@ -97,9 +98,55 @@ export const getChatLogs = async (req, res) => {
       order: [["timestamp", "ASC"]],
     };
 
+    const courses = await getAllCourses(instructorId);
+
+    if (courses.length === 0) {
+      return res
+        .status(403)
+        .json({ error: "Instructor is not part of any courses" });
+    }
+
+    const courseAssignments = courses.flatMap(
+      (course) => course.assignments?.map((assignment) => assignment.id) ?? []
+    );
+
+    queryOptions.where.assignmentId = courseAssignments;
+
+    if (assignmentId && courseAssignments.includes(parseInt(assignmentId))) {
+      queryOptions.where.assignmentId = assignmentId;
+    }
+
     if (userId) {
       queryOptions.where.userId = userId;
     }
+
+    const chatLogs = await ChatLogModel.findAll(queryOptions);
+
+    res.json(chatLogs);
+  } catch (error) {
+    console.error("Error retrieving chat logs:", error);
+    res.status(500).json({ error: "Failed to retrieve chat logs" });
+  }
+};
+
+export const getUserChatLogs = async (req, res) => {
+  try {
+    const userId = req.user.sub;
+    const { assignmentId, limit = 100, offset = 0 } = req.query;
+
+    // Build query options
+    const queryOptions = {
+      where: {},
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+      order: [["timestamp", "ASC"]],
+    };
+
+    if (assignmentId) {
+      queryOptions.where.assignmentId = assignmentId;
+    }
+
+    queryOptions.where.userId = userId;
 
     const chatLogs = await ChatLogModel.findAll(queryOptions);
 

@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
 import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
 import { useNavigate } from "react-router-dom";
+import StudentActivitySheet from "./StudentActivitySheet.jsx";
 
 const AssignmentPage = () => {
   const { courseId, assignmentId } = useParams();
@@ -66,8 +67,20 @@ const AssignmentPage = () => {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-col">
         <CardTitle>{assignmentData.name}</CardTitle>
+        <div className="py-2 space-x-2 flex flex-row">
+          <Link to={`/chatbot?assignmentId=${assignmentData.id}`}>
+            <Button>
+              <MessageCircle className="mr-2" />
+              Ask Chatbot
+            </Button>
+          </Link>
+          <StudentActivitySheet
+            users={assignmentData.course.users}
+            assignmentId={assignmentId}
+          />
+        </div>
       </CardHeader>
       <CardContent>
         {assignmentData ? (
@@ -149,10 +162,6 @@ const AssignmentPage = () => {
           <p>No assignment data available.</p>
         )}
       </CardContent>
-      <Button onClick={handleChatbotClick} variant="outline">
-            <MessageCircle className="mr-2" />
-            Ask Chatbot
-          </Button>
     </Card>
   );
 };

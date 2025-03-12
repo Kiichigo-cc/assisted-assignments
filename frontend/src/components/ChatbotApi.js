@@ -21,9 +21,33 @@ export async function fetchChatbotResponse(message, user, accessToken, assignmen
   }
 }
 
-export const fetchChatLogs = async (accessToken) => {
+export const fetchChatLogs = async (
+  accessToken,
+  userId = null,
+  assignmentId = null,
+  limit = 100,
+  offset = 0,
+  instructorView = false
+) => {
   try {
-    const response = await fetch("http://localhost:5001/chat/logs", {
+    // Create a URLSearchParams object to handle query parameters cleanly
+    const params = new URLSearchParams({
+      limit: limit.toString(),
+      offset: offset.toString(),
+    });
+
+    if (userId) {
+      params.append("userId", userId);
+    }
+    if (assignmentId) {
+      params.append("assignmentId", assignmentId);
+    }
+    // Construct the full URL with query parameters
+    const url = instructorView
+      ? `http://localhost:5001/chat/instructor/logs?${params.toString()}`
+      : `http://localhost:5001/chat/user/logs?${params.toString()}`;
+
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
