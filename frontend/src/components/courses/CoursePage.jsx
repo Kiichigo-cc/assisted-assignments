@@ -43,7 +43,6 @@ export function CoursePage() {
   useEffect(() => {
     const getCourseDetails = async () => {
       const result = await fetchCourse(courseId, accessToken);
-
       if (result.success) {
         setCourse(result.course);
         setEnrolledUsers(result.users);

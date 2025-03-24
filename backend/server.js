@@ -69,7 +69,7 @@ ChatLogModel.belongsTo(AssignmentModel, {
 export { ChatLogModel, CourseModel, AssignmentModel, TaskModel, UserModel };
 
 sequelize
-  .sync({ force: false })
+  .sync({ force: false }) //Set to true will delete the whole database
   .then(() => console.log("Database synced"))
   .catch((error) => console.error("Error syncing database:", error));
 

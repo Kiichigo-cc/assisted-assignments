@@ -108,3 +108,24 @@ export const generateInviteCode = async (courseId, accessToken) => {
     return { success: false, error: error.message };
   }
 };
+
+export const updateCourse = async (courseId, updatedCourse, accessToken) => {
+  try {
+    const response = await fetch(`http://localhost:5001/courses/${courseId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(updatedCourse),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update course");
+    }
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};

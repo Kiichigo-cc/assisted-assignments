@@ -101,10 +101,6 @@ const AssignmentDialog = ({
       };
     });
 
-    // If dueDate and time are also included in the assignment
-    const formattedDueDateTime = date
-      ? format(date, "yyyy-MM-dd")
-      : "" + " " + time;
 
     const formData = {
       name,
@@ -113,7 +109,7 @@ const AssignmentDialog = ({
       submission,
       grading,
       points,
-      dueDate: formattedDueDateTime, // Combine date and time here
+      dueDate: combineDateAndTime(date, time), // Combine date and time here
       tasks: updatedTasks, // Use updated tasks with combined dueDate and dueTime
     };
 

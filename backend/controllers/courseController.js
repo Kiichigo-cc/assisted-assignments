@@ -9,12 +9,12 @@ import { getAssignmentByCourseId } from "../queries/assignmentQueries.js";
 
 export const createCourse = async (req, res) => {
   try {
-    const { courseName, courseId, term, courseNumber } = req.body.newCourse;
+    const { courseName, term, courseNumber } = req.body.newCourse;
     const userId = req.body.user.sub;
     const name = req.body.user.nickname;
     const picture = req.body.user.picture;
 
-    if (!courseName || !courseId || !term || !courseNumber) {
+    if (!courseName || !term || !courseNumber) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
@@ -28,7 +28,6 @@ export const createCourse = async (req, res) => {
     }
 
     const newCourse = await createNewCourse(
-      courseId,
       courseName,
       term,
       courseNumber,
@@ -115,5 +114,29 @@ export const deleteCourse = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Failed to delete course" });
+  }
+};
+
+export const updateCourse = async (req, res) => {
+  const { id: courseId } = req.params;
+  const { courseName, term, courseNumber } = req.body;
+
+  try {
+    const course = await getCourseById(courseId);
+
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+
+    course.courseName = courseName;
+    course.term = term;
+    course.courseNumber = courseNumber;
+
+    await course.save();
+
+    return res.status(200).json(course);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to update course" });
   }
 };
