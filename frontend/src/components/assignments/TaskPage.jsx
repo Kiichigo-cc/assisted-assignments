@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import useAccessToken from "@/hooks/useAccessToken";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { fetchAssignmentTask } from "../../api/assignmentApi.js";
+import { fetchAssignmentTask } from "../../api/AssignmentApi";
 import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
 
 const TaskPage = () => {
