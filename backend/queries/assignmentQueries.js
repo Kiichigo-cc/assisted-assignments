@@ -13,6 +13,7 @@ export const getAssignmentById = async (assignmentId) => {
       {
         model: TaskModel,
         as: "tasks", // Include associated tasks
+        order: [['dueDate', 'ASC']],
       },
       {
         model: CourseModel, // Include associated course
@@ -38,6 +39,7 @@ export const getAssignmentByCourseId = async (courseId) => {
       {
         model: TaskModel,
         as: "tasks", // Include associated tasks
+        order: [['dueDate', 'ASC']],
       },
       {
         model: CourseModel, // Include associated course

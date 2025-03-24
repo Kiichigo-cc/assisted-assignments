@@ -90,7 +90,7 @@ export function RenderAssignments({ course }) {
         </InstructorAccess>
       </div>
       <div className="flex flex-col space-y-4 mt-4">
-        {assignments?.map((assignment) => (
+        {assignments?.sort((a, b) => new Date(b.dueDate) - new Date(a.dueDate)).map((assignment) => (
           <Card key={assignment.id} in>
             <div className="flex flex-row items-center py-2 px-4">
               <div>
@@ -120,7 +120,21 @@ export function RenderAssignments({ course }) {
                 _instructions={assignment.instructions}
                 _grading={assignment.grading}
                 _submission={assignment.submission}
-                _tasks={assignment.tasks}
+                _tasks={assignment.tasks.map(task => {
+                  const dueDateObj = new Date(task.dueDate);
+                  const dueDate = dueDateObj.toString();
+                  const dueTime = dueDateObj.toLocaleTimeString("en-GB", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  })
+                  
+                  return {
+                    ...task,
+                    dueDate: dueDate,
+                    dueTime: dueTime,
+                  };
+                })}
                 _time={new Date(assignment.dueDate).toLocaleTimeString(
                   "en-GB",
                   {
@@ -157,7 +171,7 @@ export function RenderAssignments({ course }) {
               />
             </div>
             <div>
-              {assignment?.tasks.map((task) => (
+              {assignment?.tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate)).map((task) => (
                 <div
                   key={task.id}
                   className="border-t px-4 py-2 radius-0 rounded-none bg-secondary/40"

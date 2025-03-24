@@ -6,16 +6,13 @@ import {
 } from "../server.js";
 
 export const createNewCourse = async (
-  courseId,
   courseName,
   term,
   courseNumber,
   userId
 ) => {
   const newCourse = await CourseModel.create({
-    key: courseId,
     courseName,
-    courseId,
     term,
     courseNumber,
   });
@@ -38,6 +35,7 @@ export const getCourseById = async (courseId) => {
           {
             model: TaskModel,
             as: "tasks",
+            order: [["dueDate", "ASC"]],
           },
         ],
       },
@@ -63,6 +61,7 @@ export const getAllCourses = async (userId) => {
           {
             model: TaskModel,
             as: "tasks",
+            order: [["dueDate", "ASC"]],
           },
         ],
       },

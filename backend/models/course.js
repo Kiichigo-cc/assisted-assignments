@@ -20,11 +20,6 @@ export const Course = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    courseId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true, // Ensures courseId is unique
-    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,

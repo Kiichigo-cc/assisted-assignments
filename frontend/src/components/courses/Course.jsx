@@ -25,7 +25,12 @@ import useAccessToken from "@/hooks/useAccessToken";
 import { useAuth0 } from "@auth0/auth0-react";
 import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
 import { toast } from "sonner";
-import { createCourse, deleteCourse, joinCourse } from "../../api/courseApi";
+import {
+  createCourse,
+  deleteCourse,
+  joinCourse,
+  updateCourse,
+} from "../../api/courseApi";
 import { EllipsisVertical } from "lucide-react";
 import {
   DropdownMenu,
@@ -35,6 +40,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import InstructorAccess from "../user-permissions/InstructorAccess";
+import { set } from "date-fns";
 
 export function DialogButton({
   buttonLabel,
@@ -82,7 +88,6 @@ export default function Courses() {
   );
   const [courses, setCourses] = useState([]);
   const [courseName, setCourseName] = useState("");
-  const [courseId, setCourseId] = useState("");
   const [term, setTerm] = useState("");
   const [courseNumber, setCourseNumber] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -92,6 +97,7 @@ export default function Courses() {
   const [open, setOpen] = useState(false);
   const [openCourseForm, setOpenCourseForm] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -125,7 +131,7 @@ export default function Courses() {
   }, [accessToken, open]);
 
   const handleSubmit = async () => {
-    const newCourse = { courseName, courseId, term, courseNumber };
+    const newCourse = { courseName, term, courseNumber };
     setOpenCourseForm(false); // Close the form
 
     const { success, addedCourse, message } = await createCourse(
@@ -138,7 +144,6 @@ export default function Courses() {
       setCourses([...courses, addedCourse]); // Update the courses state with the new course
       // Clear the form after submission
       setCourseName("");
-      setCourseId("");
       setTerm("");
       setCourseNumber("");
     } else {
@@ -152,12 +157,6 @@ export default function Courses() {
       label: "Course Name",
       value: courseName,
       onChange: (e) => setCourseName(e.target.value),
-    },
-    {
-      id: "courseId",
-      label: "Course ID",
-      value: courseId,
-      onChange: (e) => setCourseId(e.target.value),
     },
     {
       id: "term",
@@ -194,23 +193,141 @@ export default function Courses() {
     if (success) {
       const updatedCourses = courses.filter((course) => course.id !== courseId);
       setCourses(updatedCourses);
-      setOpenDeleteDialog(false);
+      setOpenUpdateDialog(false);
       toast("Course deleted successfully");
     } else {
       toast("Issue deleting course");
     }
   };
 
+  const handleUpdate = async (courseId, updatedCourse) => {
+    const { success, message } = await updateCourse(
+      courseId,
+      updatedCourse,
+      accessToken
+    );
+
+    if (success) {
+      const updatedCourses = courses.map((course) =>
+        course.id === courseId ? { ...course, ...updatedCourse } : course
+      );
+      setCourses(updatedCourses);
+      toast("Course updated successfully");
+      setOpenUpdateDialog(false);
+    } else {
+      toast("Issue updating course");
+    }
+  };
+
   const renderCourses = () => {
+    const [selectedAction, setSelectedAction] = useState(null); // Track the selected action (Edit/Delete)
+
+    const handleActionChange = (action) => {
+      setSelectedAction(action);
+      setOpenUpdateDialog(true);
+    };
+
+    const RenderDialogContent = ({ course }) => {
+      console.log(course);
+      const [courseName, setCourseName] = useState(course.courseName);
+      const [term, setTerm] = useState(course.term);
+      const [courseNumber, setCourseNumber] = useState(course.courseNumber);
+      if (selectedAction === "edit") {
+        return (
+          <>
+            <DialogHeader>
+              <DialogTitle>Edit Course</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-2 py-4">
+              <div>
+                <Label htmlFor="courseName" className="text-left">
+                  Course Name
+                </Label>
+                <Input
+                  id="courseName"
+                  value={courseName}
+                  onChange={(e) => setCourseName(e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div>
+                <Label htmlFor="term" className="text-left">
+                  Term
+                </Label>
+                <Input
+                  id="term"
+                  value={term}
+                  onChange={(e) => setTerm(e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div>
+                <Label htmlFor="courseNumber" className="text-left">
+                  Course Number
+                </Label>
+                <Input
+                  id="courseNumber"
+                  value={courseNumber}
+                  onChange={(e) => setCourseNumber(e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                onClick={() => {
+                  const updatedCourse = {
+                    ...course,
+                    courseName,
+                    term,
+                    courseNumber,
+                  };
+                  handleUpdate(course.id, updatedCourse);
+                }}
+                type="submit"
+              >
+                Save changes
+              </Button>
+            </DialogFooter>
+          </>
+        );
+      }
+
+      if (selectedAction === "delete") {
+        return (
+          <>
+            <DialogHeader>
+              <DialogTitle>Are you absolutely sure?</DialogTitle>
+              <DialogDescription>
+                This action cannot be undone. This will permanently delete the
+                course and remove the data from our servers.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                onClick={() => {
+                  handleDelete(course.id);
+                }}
+                variant="destructive"
+              >
+                Delete
+              </Button>
+            </DialogFooter>
+          </>
+        );
+      }
+
+      return null;
+    };
+
     return isLoading ? (
       <div>Loading</div>
     ) : (
       courses.map((course) => (
-        <Card className="flex flex-row items-center py-2 px-4">
+        <Card className="flex flex-row items-center py-2 px-4" key={course.id}>
           <CardHeader>
             <Link
               to={`/courses/${course.id}`}
-              key={course.id}
               className="block hover:underline"
             >
               <CardTitle>
@@ -219,7 +336,7 @@ export default function Courses() {
             </Link>
             <CardDescription>Term: {course.term}</CardDescription>
           </CardHeader>
-          <Dialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
+          <Dialog open={openUpdateDialog} onOpenChange={setOpenUpdateDialog}>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <EllipsisVertical
@@ -229,29 +346,27 @@ export default function Courses() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>Edit</DropdownMenuItem>
                   <DialogTrigger asChild>
-                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        handleActionChange("edit");
+                      }}
+                    >
+                      Edit
+                    </DropdownMenuItem>
                   </DialogTrigger>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      handleActionChange("delete");
+                    }}
+                  >
+                    Delete
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Are you absolutely sure?</DialogTitle>
-                <DialogDescription>
-                  This action cannot be undone. This will permanently delete the
-                  course and remove the data from our servers.
-                </DialogDescription>
-                <DialogFooter>
-                  <Button
-                    onClick={() => handleDelete(course.id)}
-                    variant="destructive"
-                  >
-                    Delete
-                  </Button>
-                </DialogFooter>
-              </DialogHeader>
+            <DialogContent className="sm:max-w-[425px]">
+              <RenderDialogContent course={course} />
             </DialogContent>
           </Dialog>
         </Card>
