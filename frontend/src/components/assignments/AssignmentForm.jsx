@@ -33,7 +33,7 @@ import {
 
 import { X } from "lucide-react";
 import { Textarea } from "../ui/textarea";
-import { createAssignment, updateAssignment } from "../../api/assignmentApi.js";
+import { createAssignment, updateAssignment } from "../../api/AssignmentApi";
 
 const AssignmentDialog = ({
   updateAssignments,
@@ -100,7 +100,6 @@ const AssignmentDialog = ({
         dueDate: combinedDueDateTime, // Store the combined datetime in `dueDate`
       };
     });
-
 
     const formData = {
       name,
