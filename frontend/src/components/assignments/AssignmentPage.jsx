@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { fetchAssignmentData } from "../../api/assignmentApi.js";
+import { fetchAssignmentData } from "../../api/AssignmentApi";
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
 import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
@@ -27,7 +27,9 @@ const AssignmentPage = () => {
 
   const handleChatbotClick = () => {
     const encodedPurpose = encodeURIComponent(assignmentData.purpose || "N/A");
-    const encodedInstructions = encodeURIComponent(assignmentData.instructions || "N/A");
+    const encodedInstructions = encodeURIComponent(
+      assignmentData.instructions || "N/A"
+    );
     navigate(`/chatbot?assignmentId=${assignmentId}`);
   };
 
@@ -46,7 +48,14 @@ const AssignmentPage = () => {
           accessToken
         );
         setAssignmentData(data);
-        setBreadcrumbs(courseId, data.course.courseName, assignmentId, data.name, null, "");
+        setBreadcrumbs(
+          courseId,
+          data.course.courseName,
+          assignmentId,
+          data.name,
+          null,
+          ""
+        );
       } catch (err) {
         setError(err.message);
       } finally {
