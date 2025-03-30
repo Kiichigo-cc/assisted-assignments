@@ -48,7 +48,7 @@ const AssignmentModel = Assignment(sequelize);
 const TaskModel = Task(sequelize);
 const UserModel = User(sequelize);
 
-// let activeCodes = {};
+let activeCodes = {};
 
 CourseModel.hasMany(AssignmentModel, {
   foreignKey: "courseId",
