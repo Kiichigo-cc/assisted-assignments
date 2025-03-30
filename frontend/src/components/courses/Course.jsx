@@ -98,6 +98,7 @@ export default function Courses() {
   const [openCourseForm, setOpenCourseForm] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
+  const apiBaseUrl = import.meta.env.index.js_BASE_URL;
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -105,7 +106,7 @@ export default function Courses() {
         return;
       }
       try {
-        const response = await fetch("http://localhost:5001/courses", {
+        const response = await fetch(`${apiBaseUrl}/courses`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
