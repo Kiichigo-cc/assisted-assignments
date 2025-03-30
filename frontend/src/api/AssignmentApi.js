@@ -1,16 +1,17 @@
+// Get the API base URL from the environment variable
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
+// Create an assignment
 export const createAssignment = async (courseId, accessToken, formData) => {
   try {
-    const response = await fetch(
-      `http://localhost:5001/assignments/${courseId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(formData),
-      }
-    );
+    const response = await fetch(`${apiBaseUrl}/assignments/${courseId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(formData),
+    });
 
     if (!response.ok) {
       throw new Error("Failed to create assignment");
@@ -23,7 +24,7 @@ export const createAssignment = async (courseId, accessToken, formData) => {
   }
 };
 
-// Fetch a specific assingment by ID
+// Fetch a specific assignment by ID
 export const fetchAssignmentData = async (
   courseId,
   assignmentId,
@@ -31,7 +32,7 @@ export const fetchAssignmentData = async (
 ) => {
   try {
     const response = await fetch(
-      `http://localhost:5001/assignments/${courseId}/${assignmentId}`,
+      `${apiBaseUrl}/assignments/${courseId}/${assignmentId}`,
       {
         method: "GET",
         headers: {
@@ -52,11 +53,11 @@ export const fetchAssignmentData = async (
   }
 };
 
-// Function to delete an assignment
+// Delete an assignment
 export const deleteAssignment = async (courseId, assignmentId, accessToken) => {
   try {
     const response = await fetch(
-      `http://localhost:5001/assignments/${courseId}/${assignmentId}`,
+      `${apiBaseUrl}/assignments/${courseId}/${assignmentId}`,
       {
         method: "DELETE",
         headers: {
@@ -78,19 +79,16 @@ export const deleteAssignment = async (courseId, assignmentId, accessToken) => {
   }
 };
 
-// Function to fetch assignments
+// Fetch assignments
 export const fetchAssignments = async (courseId, accessToken) => {
   try {
-    const response = await fetch(
-      `http://localhost:5001/assignments/${courseId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const response = await fetch(`${apiBaseUrl}/assignments/${courseId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     if (response.ok) {
       const data = await response.json();
@@ -103,6 +101,7 @@ export const fetchAssignments = async (courseId, accessToken) => {
   }
 };
 
+// Fetch assignment task by ID
 export const fetchAssignmentTask = async (
   courseId,
   assignmentId,
@@ -111,7 +110,7 @@ export const fetchAssignmentTask = async (
 ) => {
   try {
     const response = await fetch(
-      `http://localhost:5001/assignments/${courseId}/${assignmentId}/${taskId}`,
+      `${apiBaseUrl}/assignments/${courseId}/${assignmentId}/${taskId}`,
       {
         method: "GET",
         headers: {
@@ -132,6 +131,7 @@ export const fetchAssignmentTask = async (
   }
 };
 
+// Update an assignment
 export const updateAssignment = async (
   courseId,
   assignmentId,
@@ -140,7 +140,7 @@ export const updateAssignment = async (
 ) => {
   try {
     const response = await fetch(
-      `http://localhost:5001/assignments/${courseId}/${assignmentId}`,
+      `${apiBaseUrl}/assignments/${courseId}/${assignmentId}`,
       {
         method: "POST",
         headers: {

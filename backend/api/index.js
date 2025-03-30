@@ -4,25 +4,43 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Sequelize } from "sequelize";
-import { ChatLog } from "./models/chatlog.js";
-import { Course } from "./models/course.js";
-import { Task } from "./models/task.js";
-import { Assignment } from "./models/assignment.js";
-import { User } from "./models/user.js";
+import { ChatLog } from "../models/chatlog.js";
+import { Course } from "../models/course.js";
+import { Task } from "../models/task.js";
+import { Assignment } from "../models/assignment.js";
+import { User } from "../models/user.js";
 import crypto from "crypto";
 import moment from "moment";
-import courseRoutes from "./routes/courseRoutes.js";
-import chatRoutes from "./routes/chatRoutes.js";
-import assignmentRoutes from "./routes/assignmentRoutes.js";
-import { checkJwt } from "./middleware/checkJwt.js";
-import { instructorScopes } from "./middleware/checkInstructorScopes.js";
+import courseRoutes from "../routes/courseRoutes.js";
+import chatRoutes from "../routes/chatRoutes.js";
+import assignmentRoutes from "../routes/assignmentRoutes.js";
+import { checkJwt } from "../middleware/checkJwt.js";
+import { instructorScopes } from "../middleware/checkInstructorScopes.js";
 
 dotenv.config();
 
-const sequelize = new Sequelize({
-  dialect: "sqlite",
-  storage: "./database.sqlite",
-});
+let sequelize;
+
+if (process.env.NODE_ENV === "production") {
+  // Production: Use PostgreSQL
+  console.log("Using PostgreSQL for production");
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true, // Ensures SSL is used
+        rejectUnauthorized: false, // Allows self-signed certificates
+      },
+    },
+  });
+} else {
+  // Development: Use SQLite
+  console.log("Using SQLite for development");
+  sequelize = new Sequelize({
+    dialect: "sqlite",
+    storage: "./database.sqlite",
+  });
+}
 
 const ChatLogModel = ChatLog(sequelize);
 const CourseModel = Course(sequelize);
@@ -83,8 +101,21 @@ try {
 const app = express();
 const PORT = 5001;
 
+const allowedOrigin = process.env.ALLOWED_ORIGIN || "*"; // Default to "*" if not defined
+
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Check if the origin is allowed
+      if (allowedOrigin === "*" || allowedOrigin === origin || !origin) {
+        callback(null, true); // Allow the request
+      } else {
+        callback(new Error("Not allowed by CORS")); // Reject the request
+      }
+    },
+  })
+);
 app.use(bodyParser.json());
 
 // Initialize Google Gemini AI with your API key
@@ -107,19 +138,29 @@ app.post("/generate-access-code", checkJwt, instructorScopes, (req, res) => {
     return res.status(400).json({ error: "Course ID is required" });
   }
 
-  // Generate the access code
+  // Check if there's already an access code for the course
+  const existingCode = Object.entries(activeCodes).find(
+    ([code, { courseId: existingCourseId, expiresAt }]) =>
+      existingCourseId === courseId && moment(expiresAt).isAfter(moment())
+  );
+
+  if (existingCode) {
+    // If the code exists and is not expired, return the existing code
+    const [accessCode, { expiresAt }] = existingCode;
+    return res.status(200).json({ accessCode, expiresAt });
+  }
+
+  // If no valid access code exists, generate a new one
   const accessCode = generateAccessCode();
 
   // Set expiration time (10 minutes from now)
-  const expiresAt = moment().add(10, "minutes").toISOString();
+  const expiresAt = moment().add(90, "days").toISOString();
 
   // Store the access code with the expiration time
   activeCodes[accessCode] = { courseId, expiresAt };
 
-  console.log("ACCCESSCODES", activeCodes);
-
-  // Send the access code back to the client
-  res.status(200).json({ accessCode });
+  // Send the new access code back to the client
+  res.status(200).json({ accessCode, expiresAt });
 });
 
 // Endpoint to join a course using the access code
@@ -168,6 +209,10 @@ app.post("/join-course", checkJwt, async (req, res) => {
     console.error("Error joining course:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
+});
+
+app.get("/hello", (req, res) => {
+  res.json({ message: "Hello, World!" }); // Return JSON response
 });
 
 app.listen(PORT, () => {

@@ -1,8 +1,8 @@
 import { getAssignmentById } from "../queries/assignmentQueries.js";
 import { getAllCourses } from "../queries/courseQueries.js";
-import { ChatLogModel } from "../server.js";
-import { AssignmentModel } from "../server.js";
-import { genAI, model } from "../server.js";
+import { ChatLogModel } from "../api/index.js";
+import { AssignmentModel } from "../api/index.js";
+import { genAI, model } from "../api/index.js";
 
 export const chat = async (req, res) => {
   try {
@@ -19,12 +19,16 @@ export const chat = async (req, res) => {
       // Fetch assignment details
       const assignment = await getAssignmentById(assignmentId);
       if (assignment) {
-        assignmentContext = `Assignment: ${assignment.name}\nPurpose: ${assignment.purpose}\nInstructions: ${assignment.instructions}\n
-        Submission Details: ${
-          assignment.submission
-        }\nGrading Criteria: ${assignment.grading}\nPoints: ${
-          assignment.points
-        }\nDue Date: ${assignment.dueDate}\nTasks: ${assignment.tasks.map(task => JSON.stringify(task)).join(", ")}`;
+        assignmentContext = `Assignment: ${assignment.name}\nPurpose: ${
+          assignment.purpose
+        }\nInstructions: ${assignment.instructions}\n
+        Submission Details: ${assignment.submission}\nGrading Criteria: ${
+          assignment.grading
+        }\nPoints: ${assignment.points}\nDue Date: ${
+          assignment.dueDate
+        }\nTasks: ${assignment.tasks
+          .map((task) => JSON.stringify(task))
+          .join(", ")}`;
       }
     }
     console.log("Received assignment context:", assignmentContext);
@@ -43,12 +47,14 @@ export const chat = async (req, res) => {
     }));
 
     if (assignmentContext) {
-      const contextString = typeof assignmentContext === "string" ? assignmentContext : JSON.stringify(assignmentContext);
+      const contextString =
+        typeof assignmentContext === "string"
+          ? assignmentContext
+          : JSON.stringify(assignmentContext);
       const modifiedContextString = `This is the context of an assignment, answer any questions with this context: ${contextString}`;
       //history.unshift({ role: "user", parts: [{text: assignmentContext }] });
       history.push({ role: "user", parts: [{ text: contextString }] });
     }
-    
 
     // Push the current user message onto the stack of messages.
     history.push({ role: "user", parts: [{ text: userMessage }] });
@@ -66,7 +72,7 @@ export const chat = async (req, res) => {
       userName: userName,
       message: userMessage,
       sender: "user",
-      ...(assignmentId && { assignmentId })
+      ...(assignmentId && { assignmentId }),
     });
 
     await ChatLogModel.create({
@@ -75,7 +81,7 @@ export const chat = async (req, res) => {
       userName: "TD3A AI",
       message: reply,
       sender: "system",
-      ...(assignmentId && { assignmentId })
+      ...(assignmentId && { assignmentId }),
     });
 
     res.json({ reply });

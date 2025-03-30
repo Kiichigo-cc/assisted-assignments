@@ -90,9 +90,6 @@ export function CoursePage() {
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                   <DialogTitle>Share Invite Code</DialogTitle>
-                  <DialogDescription>
-                    This code will last for 10 Minutes before expiring.
-                  </DialogDescription>
                 </DialogHeader>
                 <div className="flex items-center space-x-2">
                   <div className="grid flex-1 gap-2">

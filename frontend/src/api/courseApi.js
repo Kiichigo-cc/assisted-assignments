@@ -1,6 +1,10 @@
+// Get the API base URL from the environment variable
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
+// Create a course
 export const createCourse = async (newCourse, user, accessToken) => {
   try {
-    const response = await fetch("http://localhost:5001/courses", {
+    const response = await fetch(`${apiBaseUrl}/courses`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -20,9 +24,10 @@ export const createCourse = async (newCourse, user, accessToken) => {
   }
 };
 
+// Fetch a specific course by ID
 export const fetchCourse = async (courseId, accessToken) => {
   try {
-    const response = await fetch(`http://localhost:5001/courses/${courseId}`, {
+    const response = await fetch(`${apiBaseUrl}/courses/${courseId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -41,9 +46,10 @@ export const fetchCourse = async (courseId, accessToken) => {
   }
 };
 
+// Delete a course
 export const deleteCourse = async (courseId, accessToken) => {
   try {
-    const response = await fetch(`http://localhost:5001/courses/${courseId}`, {
+    const response = await fetch(`${apiBaseUrl}/courses/${courseId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -61,9 +67,10 @@ export const deleteCourse = async (courseId, accessToken) => {
   }
 };
 
+// Join a course
 export const joinCourse = async (accessCode, user, accessToken) => {
   try {
-    const response = await fetch("http://localhost:5001/join-course", {
+    const response = await fetch(`${apiBaseUrl}/join-course`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -87,9 +94,10 @@ export const joinCourse = async (accessCode, user, accessToken) => {
   }
 };
 
+// Generate invite code for a course
 export const generateInviteCode = async (courseId, accessToken) => {
   try {
-    const response = await fetch("http://localhost:5001/generate-access-code", {
+    const response = await fetch(`${apiBaseUrl}/generate-access-code`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -109,9 +117,10 @@ export const generateInviteCode = async (courseId, accessToken) => {
   }
 };
 
+// Update course details
 export const updateCourse = async (courseId, updatedCourse, accessToken) => {
   try {
-    const response = await fetch(`http://localhost:5001/courses/${courseId}`, {
+    const response = await fetch(`${apiBaseUrl}/courses/${courseId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

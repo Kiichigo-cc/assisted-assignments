@@ -1,6 +1,14 @@
-export async function fetchChatbotResponse(message, user, accessToken, assignmentContext, assignmentId) {
+export async function fetchChatbotResponse(
+  message,
+  user,
+  accessToken,
+  assignmentContext,
+  assignmentId
+) {
   try {
-    const response = await fetch("http://localhost:5001/chat", {
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
+    const response = await fetch(`${apiBaseUrl}/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,6 +38,8 @@ export const fetchChatLogs = async (
   instructorView = false
 ) => {
   try {
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
     // Create a URLSearchParams object to handle query parameters cleanly
     const params = new URLSearchParams({
       limit: limit.toString(),
@@ -44,8 +54,8 @@ export const fetchChatLogs = async (
     }
     // Construct the full URL with query parameters
     const url = instructorView
-      ? `http://localhost:5001/chat/instructor/logs?${params.toString()}`
-      : `http://localhost:5001/chat/user/logs?${params.toString()}`;
+      ? `${apiBaseUrl}/chat/instructor/logs?${params.toString()}`
+      : `${apiBaseUrl}/chat/user/logs?${params.toString()}`;
 
     const response = await fetch(url, {
       method: "GET",

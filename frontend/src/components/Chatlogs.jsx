@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ReactMarkdown from "react-markdown";
-import { fetchChatLogs } from "./ChatbotApi";
+import { fetchChatLogs } from "../api/ChatbotApi";
 import { useLocation } from "react-router-dom";
 
 const Chatlogs = () => {

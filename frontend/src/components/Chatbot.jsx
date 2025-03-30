@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { fetchChatbotResponse, fetchChatLogs } from "./ChatbotApi"; // Import the API function
+import { fetchChatbotResponse, fetchChatLogs } from "../api/ChatbotApi"; // Import the API function
 import ReactMarkdown from "react-markdown";
 import { useAuth0 } from "@auth0/auth0-react";
 import useAccessToken from "@/hooks/useAccessToken";
@@ -37,7 +37,13 @@ export default function Chatbot() {
     setLoading(true);
 
     try {
-      const botResponse = await fetchChatbotResponse(input, user, accessToken, assignmentContext, assignmentId);
+      const botResponse = await fetchChatbotResponse(
+        input,
+        user,
+        accessToken,
+        assignmentContext,
+        assignmentId
+      );
       setMessages((prevMessages) => [
         ...prevMessages,
         { text: botResponse, sender: "system" },
