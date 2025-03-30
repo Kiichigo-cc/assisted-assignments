@@ -98,7 +98,7 @@ export default function Courses() {
   const [openCourseForm, setOpenCourseForm] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
-  const apiBaseUrl = import.meta.env.index.js_BASE_URL;
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchCourses = async () => {
