@@ -4,18 +4,18 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Sequelize } from "sequelize";
-import { ChatLog } from "../models/chatlog.js";
-import { Course } from "../models/course.js";
-import { Task } from "../models/task.js";
-import { Assignment } from "../models/assignment.js";
-import { User } from "../models/user.js";
+import { ChatLog } from "./models/chatlog.js";
+import { Course } from "./models/course.js";
+import { Task } from "./models/task.js";
+import { Assignment } from "./models/assignment.js";
+import { User } from "./models/user.js";
 import crypto from "crypto";
 import moment from "moment";
-import courseRoutes from "../routes/courseRoutes.js";
-import chatRoutes from "../routes/chatRoutes.js";
-import assignmentRoutes from "../routes/assignmentRoutes.js";
-import { checkJwt } from "../middleware/checkJwt.js";
-import { instructorScopes } from "../middleware/checkInstructorScopes.js";
+import courseRoutes from "./routes/courseRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
+import assignmentRoutes from "./routes/assignmentRoutes.js";
+import { checkJwt } from "./middleware/checkJwt.js";
+import { instructorScopes } from "./middleware/checkInstructorScopes.js";
 
 dotenv.config();
 
@@ -48,7 +48,7 @@ const AssignmentModel = Assignment(sequelize);
 const TaskModel = Task(sequelize);
 const UserModel = User(sequelize);
 
-let activeCodes = {};
+// let activeCodes = {};
 
 CourseModel.hasMany(AssignmentModel, {
   foreignKey: "courseId",

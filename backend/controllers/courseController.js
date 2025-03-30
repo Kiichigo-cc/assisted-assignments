@@ -1,4 +1,4 @@
-import { UserModel, TaskModel, AssignmentModel } from "../api/index.js";
+import { UserModel, TaskModel, AssignmentModel } from "../server.js";
 import {
   createNewCourse,
   getCourseById,

@@ -3,7 +3,7 @@ import {
   getAssignmentById,
   getTaskById,
 } from "../queries/assignmentQueries.js";
-import { AssignmentModel, TaskModel } from "../api/index.js";
+import { AssignmentModel, TaskModel } from "../server.js";
 
 export const getAssignments = async (req, res) => {
   const { courseId, assignmentId } = req.params;

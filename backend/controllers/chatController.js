@@ -1,8 +1,8 @@
 import { getAssignmentById } from "../queries/assignmentQueries.js";
 import { getAllCourses } from "../queries/courseQueries.js";
-import { ChatLogModel } from "../api/index.js";
-import { AssignmentModel } from "../api/index.js";
-import { genAI, model } from "../api/index.js";
+import { ChatLogModel } from "../server.js";
+import { AssignmentModel } from "../server.js";
+import { genAI, model } from "../server.js";
 
 export const chat = async (req, res) => {
   try {

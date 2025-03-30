@@ -3,7 +3,7 @@ import {
   AssignmentModel,
   TaskModel,
   UserModel,
-} from "../api/index.js";
+} from "../server.js";
 
 export const createNewCourse = async (
   courseName,

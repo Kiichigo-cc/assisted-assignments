@@ -3,7 +3,7 @@ import {
   TaskModel,
   CourseModel,
   UserModel,
-} from "../api/index.js";
+} from "../server.js";
 
 //get assignment by its id
 export const getAssignmentById = async (assignmentId) => {
