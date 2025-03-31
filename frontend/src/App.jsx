@@ -26,6 +26,7 @@ import { Toaster } from "@/components/ui/sonner";
 import AssignmentPage from "./components/assignments/AssignmentPage";
 import TaskPage from "./components/assignments/TaskPage";
 import DynamicBreadcrumb from "./components/nav-breadcrumb";
+import { Analytics } from "@vercel/analytics/react";
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
@@ -142,6 +143,7 @@ function App() {
         </SidebarProvider>
       </BrowserRouter>
       <Toaster />
+      <Analytics />
     </ThemeProvider>
   );
 }
