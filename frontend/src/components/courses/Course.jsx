@@ -337,39 +337,41 @@ export default function Courses() {
             </Link>
             <CardDescription>Term: {course.term}</CardDescription>
           </CardHeader>
-          <Dialog open={openUpdateDialog} onOpenChange={setOpenUpdateDialog}>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <EllipsisVertical
-                  className="ml-auto cursor-pointer"
-                  size={18}
-                />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuGroup>
-                  <DialogTrigger asChild>
+          <InstructorAccess>
+            <Dialog open={openUpdateDialog} onOpenChange={setOpenUpdateDialog}>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <EllipsisVertical
+                    className="ml-auto cursor-pointer"
+                    size={18}
+                  />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuGroup>
+                    <DialogTrigger asChild>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          handleActionChange("edit");
+                        }}
+                      >
+                        Edit
+                      </DropdownMenuItem>
+                    </DialogTrigger>
                     <DropdownMenuItem
                       onClick={() => {
-                        handleActionChange("edit");
+                        handleActionChange("delete");
                       }}
                     >
-                      Edit
+                      Delete
                     </DropdownMenuItem>
-                  </DialogTrigger>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      handleActionChange("delete");
-                    }}
-                  >
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <DialogContent className="sm:max-w-[425px]">
-              <RenderDialogContent course={course} />
-            </DialogContent>
-          </Dialog>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <DialogContent className="sm:max-w-[425px]">
+                <RenderDialogContent course={course} />
+              </DialogContent>
+            </Dialog>
+          </InstructorAccess>
         </Card>
       ))
     );

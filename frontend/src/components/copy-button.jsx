@@ -3,7 +3,19 @@ import React, { useState } from "react";
 import { Clipboard, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const CopyButton = ({ textToCopy }) => {
+const CopyButton = ({
+  textToCopy,
+  inactiveIcon = (
+    <Button variant="ghost" size="icon">
+      <Clipboard />
+    </Button>
+  ),
+  activeIcon = (
+    <Button variant="ghost" size="icon">
+      <Check />
+    </Button>
+  ),
+}) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -21,11 +33,7 @@ const CopyButton = ({ textToCopy }) => {
       });
   };
 
-  return (
-    <Button variant="ghost" size="icon" onClick={handleCopy}>
-      {copied ? <Check /> : <Clipboard />}
-    </Button>
-  );
+  return <div onClick={handleCopy}>{copied ? activeIcon : inactiveIcon}</div>;
 };
 
 export default CopyButton;
