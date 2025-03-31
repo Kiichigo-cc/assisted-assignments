@@ -18,6 +18,7 @@ import { deleteAssignment, fetchAssignments } from "../../api/AssignmentApi";
 import { Button } from "@/components/ui/button";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import InstructorAccess from "../user-permissions/InstructorAccess";
+import CopyButton from "../copy-button";
 
 export function RenderAssignments({ course }) {
   const { accessToken } = useAccessToken();
@@ -113,66 +114,86 @@ export function RenderAssignments({ course }) {
                     })}
                   </CardDescription>
                 </div>
-                <AssignmentDialog
-                  updateAssignments={updateAssignments}
-                  _date={new Date(assignment.dueDate).toString()}
-                  _name={assignment.name}
-                  _points={assignment.points}
-                  _purpose={assignment.purpose}
-                  _instructions={assignment.instructions}
-                  _grading={assignment.grading}
-                  _submission={assignment.submission}
-                  _tasks={assignment.tasks.map((task) => {
-                    const dueDateObj = new Date(task.dueDate);
-                    const dueDate = dueDateObj.toString();
-                    const dueTime = dueDateObj.toLocaleTimeString("en-GB", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: false,
-                    });
+                <InstructorAccess>
+                  <AssignmentDialog
+                    updateAssignments={updateAssignments}
+                    _date={new Date(assignment.dueDate).toString()}
+                    _name={assignment.name}
+                    _points={assignment.points}
+                    _purpose={assignment.purpose}
+                    _instructions={assignment.instructions}
+                    _grading={assignment.grading}
+                    _submission={assignment.submission}
+                    _tasks={assignment.tasks.map((task) => {
+                      const dueDateObj = new Date(task.dueDate);
+                      const dueDate = dueDateObj.toString();
+                      const dueTime = dueDateObj.toLocaleTimeString("en-GB", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      });
 
-                    return {
-                      ...task,
-                      dueDate: dueDate,
-                      dueTime: dueTime,
-                    };
-                  })}
-                  _time={new Date(assignment.dueDate).toLocaleTimeString(
-                    "en-GB",
-                    {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: false,
+                      return {
+                        ...task,
+                        dueDate: dueDate,
+                        dueTime: dueTime,
+                      };
+                    })}
+                    _time={new Date(assignment.dueDate).toLocaleTimeString(
+                      "en-GB",
+                      {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      }
+                    )}
+                    assignmentId={assignment.id}
+                    children={
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <EllipsisVertical
+                            className="ml-auto cursor-pointer"
+                            size={18}
+                          />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-56">
+                          <DropdownMenuGroup>
+                            <DialogTrigger asChild>
+                              <DropdownMenuItem>Edit</DropdownMenuItem>
+                            </DialogTrigger>
+
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleDelete(course.id, assignment.id)
+                              }
+                            >
+                              Delete
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <CopyButton
+                                textToCopy={`Purpose: \n${
+                                  assignment.purpose
+                                }\n\nInstructions: \n${
+                                  assignment.instructions
+                                }\n\nGrading: \n${
+                                  assignment.grading
+                                }\n\nSubmission: \n${
+                                  assignment.submission
+                                }\n\nTasks:\n${assignment.tasks
+                                  .map((task) => {
+                                    return `- ${task.title}: ${task.description}`;
+                                  })
+                                  .join("\n")}`}
+                                inactiveIcon={<div>Copy To Canvas</div>}
+                                activeIcon={<div>Copied to Clipboard</div>}
+                              />
+                            </DropdownMenuItem>
+                          </DropdownMenuGroup>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     }
-                  )}
-                  assignmentId={assignment.id}
-                  children={
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <EllipsisVertical
-                          className="ml-auto cursor-pointer"
-                          size={18}
-                        />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-56">
-                        <DropdownMenuGroup>
-                          <DialogTrigger asChild>
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                          </DialogTrigger>
-
-                          <DropdownMenuItem
-                            onClick={() =>
-                              handleDelete(course.id, assignment.id)
-                            }
-                          >
-                            Delete
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>Copy to Canvas</DropdownMenuItem>
-                        </DropdownMenuGroup>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  }
-                />
+                  />
+                </InstructorAccess>
               </div>
               <div>
                 {assignment?.tasks
