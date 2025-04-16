@@ -40,6 +40,7 @@ const AssignmentDialog = ({
   _tasks = [],
   _points = 0,
   _name = "",
+  _promptInstructions = "",
   _purpose = "",
   _instructions = "",
   _submission = "",
@@ -54,6 +55,8 @@ const AssignmentDialog = ({
   const [tasks, setTasks] = useState(_tasks);
   const [points, setPoints] = useState(_points);
   const [name, setName] = useState(_name);
+  const [promptInstructions, setPromptInstructions] =
+    useState(_promptInstructions);
   const [purpose, setPurpose] = useState(_purpose);
   const [instructions, setInstructions] = useState(_instructions);
   const [submission, setSubmission] = useState(_submission);
@@ -103,6 +106,7 @@ const AssignmentDialog = ({
 
     const formData = {
       name,
+      promptInstructions,
       purpose,
       instructions,
       submission,
@@ -200,6 +204,17 @@ const AssignmentDialog = ({
                 />
               </div>
               <div>
+                <Label htmlFor="grading" className="text-right">
+                  Chatbot Prompt Instructions
+                </Label>
+                <Textarea
+                  id="grading"
+                  value={promptInstructions}
+                  onChange={(e) => setPromptInstructions(e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              {/* <div>
                 <Label htmlFor="points" className="text-right">
                   Points
                 </Label>
@@ -265,7 +280,7 @@ const AssignmentDialog = ({
                     className="border rounded-md w-32"
                   />
                 </div>
-              </div>
+              </div> */}
               <div className="col-span-3 py-4">
                 <Button variant="secondary" onClick={handleAddTask}>
                   + Add Task
@@ -321,7 +336,7 @@ const AssignmentDialog = ({
                         className="col-span-3"
                       />
                     </div>
-                    <div>
+                    {/* <div>
                       <Label
                         htmlFor={`task-points-${index}`}
                         className="text-right"
@@ -404,7 +419,7 @@ const AssignmentDialog = ({
                           className="border p-2 rounded-md"
                         />
                       </div>
-                    </div>
+                    </div> */}
                   </CardContent>
                 </Card>
               ))}

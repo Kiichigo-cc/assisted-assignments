@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import React from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -8,6 +9,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import useAccessToken from "@/hooks/useAccessToken";
 import { useLocation } from "react-router-dom";
 import CopyButton from "./copy-button";
+import { useRef } from "react";
+import { ArrowDown } from "lucide-react";
 
 export default function Chatbot() {
   const { user } = useAuth0();
@@ -16,6 +19,9 @@ export default function Chatbot() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const { accessToken, error } = useAccessToken();
+  const messagesEndRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+  const [showScrollButton, setShowScrollButton] = useState(false);
 
   const urlParams = new URLSearchParams(search);
   const assignmentId = urlParams.get("assignmentId");
@@ -27,6 +33,27 @@ export default function Chatbot() {
     // purpose,
     // instructions,
   };
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "auto" });
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } =
+        scrollContainerRef.current;
+      const isAtBottom = scrollHeight - scrollTop - clientHeight < 100;
+      setShowScrollButton(!isAtBottom);
+    };
+
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+      return () => container.removeEventListener("scroll", handleScroll);
+    }
+  }, []);
 
   const handleSendMessage = async () => {
     if (input.trim() === "") return;
@@ -87,30 +114,28 @@ export default function Chatbot() {
   }, [accessToken]);
 
   return (
-    <Card className="w-full h-screen max-h-screen mx-auto max-w-[1000px] flex flex-col">
-      <CardContent className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-gray-500 scrollbar-track-transparent">
+    <Card className="w-full h-full max-h-[85vh] mx-auto max-w-[1000px] flex flex-col">
+      <CardContent
+        className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-gray-500 scrollbar-track-transparent"
+        ref={scrollContainerRef}
+      >
         {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`flex py-4 ${
-              message.sender === "user" ? "justify-end" : "justify-start"
-            }`}
-          >
-            <div className="max-w-[90%] space-y-2 flex flex-col">
-              <Card
-                className={`p-3 overflow-auto text-foreground ${
-                  message.sender === "user" ? "bg-background" : "bg-muted/40"
-                }`}
-              >
-                <ReactMarkdown>{message.text}</ReactMarkdown>
-              </Card>
-              {message.sender === "system" && (
-                <CopyButton textToCopy={message.text} />
-              )}
-            </div>
-          </div>
+          <Message key={index} message={message} />
         ))}
         {loading && <div className="text-center text-gray-500">Typing...</div>}
+        <div ref={messagesEndRef} />
+        {showScrollButton && (
+          <div className="sticky bottom-0 flex justify-center z-10">
+            <Button
+              size="icon"
+              onClick={() => {
+                messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              <ArrowDown className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
       </CardContent>
       <CardFooter className="flex-none">
         <div className="flex flex-col w-full space-y-2">
@@ -132,3 +157,26 @@ export default function Chatbot() {
     </Card>
   );
 }
+
+const Message = React.memo(({ message }) => {
+  return (
+    <div
+      className={`flex py-4 ${
+        message.sender === "user" ? "justify-end" : "justify-start"
+      }`}
+    >
+      <div className="max-w-[90%] space-y-2 flex flex-col">
+        <Card
+          className={`p-3 overflow-auto text-foreground ${
+            message.sender === "user" ? "bg-background" : "bg-muted/40"
+          }`}
+        >
+          <ReactMarkdown>{message.text}</ReactMarkdown>
+        </Card>
+        {message.sender === "system" && (
+          <CopyButton textToCopy={message.text} />
+        )}
+      </div>
+    </div>
+  );
+});

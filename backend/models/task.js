@@ -1,24 +1,20 @@
-import { DataTypes } from "sequelize";
-
-export const Task = (sequelize) => {
-  return sequelize.define("Task", {
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
+export default (sequelize, DataTypes) => {
+  const Task = sequelize.define("Task", {
+    title: DataTypes.STRING,
+    description: DataTypes.TEXT,
     points: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       defaultValue: 0,
     },
-    // This field will store the combined due date and time for the task
-    dueDate: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
+    dueDate: DataTypes.DATE,
   });
+
+  Task.associate = (models) => {
+    Task.belongsTo(models.Assignment, {
+      foreignKey: "assignmentId",
+      as: "assignment",
+    });
+  };
+
+  return Task;
 };

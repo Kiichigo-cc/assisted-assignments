@@ -87,7 +87,7 @@ const AssignmentPage = () => {
           </Link>
           <StudentActivitySheet
             users={assignmentData.course.users}
-            assignmentId={assignmentId}
+            assignmentData={assignmentData}
           />
         </div>
       </CardHeader>

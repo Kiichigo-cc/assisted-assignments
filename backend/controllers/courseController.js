@@ -1,4 +1,4 @@
-import { UserModel, TaskModel, AssignmentModel } from "../server.js";
+import { User, Task, Assignment } from "../server.js";
 import {
   createNewCourse,
   getCourseById,
@@ -18,9 +18,9 @@ export const createCourse = async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    let user = await UserModel.findByPk(userId);
+    let user = await User.findByPk(userId);
     if (!user) {
-      user = await UserModel.create({
+      user = await User.create({
         userId,
         profilePicture: picture,
         name: name,
@@ -90,7 +90,7 @@ export const deleteCourse = async (req, res) => {
     if (assignments.length > 0) {
       // Delete all tasks associated with the assignments
       for (const assignment of assignments) {
-        await TaskModel.destroy({
+        await Task.destroy({
           where: {
             assignmentId: assignment.id,
           },
@@ -98,7 +98,7 @@ export const deleteCourse = async (req, res) => {
       }
 
       // Delete all assignments associated with the course
-      await AssignmentModel.destroy({
+      await Assignment.destroy({
         where: {
           courseId: course.id,
         },

@@ -26,7 +26,7 @@ import useAccessToken from "@/hooks/useAccessToken";
 
 import EnrolledUsers from "../EnrolledUsers";
 import { RenderAssignments } from "../assignments/RenderAssignments";
-import { fetchCourse, generateInviteCode } from "../../api/courseApi";
+import { fetchCourse } from "../../api/courseApi";
 import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
 import InstructorAccess from "../user-permissions/InstructorAccess";
 
@@ -53,21 +53,10 @@ export function CoursePage() {
         setLoading(false);
       }
     };
-
     if (accessToken) {
       getCourseDetails();
     }
   }, [courseId, accessToken]);
-
-  const handleGenerateInviteCode = async () => {
-    const result = await generateInviteCode(courseId, accessToken);
-
-    if (result.success) {
-      setInviteCode(result.accessCode);
-    } else {
-      console.error(result.error);
-    }
-  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -83,9 +72,7 @@ export function CoursePage() {
           <InstructorAccess>
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="ml-auto" onClick={handleGenerateInviteCode}>
-                  Invite Code
-                </Button>
+                <Button className="ml-auto">Invite Code</Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
@@ -96,7 +83,7 @@ export function CoursePage() {
                     <Label htmlFor="link" className="sr-only">
                       Link
                     </Label>
-                    <Input id="link" value={inviteCode || ""} readOnly />
+                    <Input id="link" value={course.id || ""} readOnly />
                   </div>
                 </div>
                 <DialogFooter className="sm:justify-start">
