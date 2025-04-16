@@ -1,36 +1,30 @@
-import { DataTypes } from "sequelize";
-
-export const ChatLog = (sequelize) => {
-  return sequelize.define("ChatLog", {
+export default (sequelize, DataTypes) => {
+  const ChatLog = sequelize.define("ChatLog", {
     chatId: {
       type: DataTypes.STRING,
       allowNull: false,
       primaryKey: true,
-      unique: true,
     },
-    userId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    userName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    message: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
+    userId: DataTypes.STRING,
+    userName: DataTypes.STRING,
+    message: DataTypes.TEXT,
     sender: {
       type: DataTypes.ENUM("user", "system"),
       allowNull: false,
     },
     timestamp: {
       type: DataTypes.DATE,
-      allowNull: false,
       defaultValue: DataTypes.NOW,
     },
-    metadata: {
-      type: DataTypes.JSONB,
-    },
+    metadata: DataTypes.JSONB,
   });
+
+  ChatLog.associate = (models) => {
+    ChatLog.belongsTo(models.Assignment, {
+      foreignKey: "assignmentId",
+      as: "assignment",
+    });
+  };
+
+  return ChatLog;
 };

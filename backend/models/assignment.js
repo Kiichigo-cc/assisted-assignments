@@ -1,10 +1,12 @@
-import { DataTypes } from "sequelize";
-
-export const Assignment = (sequelize) => {
-  return sequelize.define("Assignment", {
+export default (sequelize, DataTypes) => {
+  const Assignment = sequelize.define("Assignment", {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    promptInstructions: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
     purpose: {
       type: DataTypes.TEXT,
@@ -32,4 +34,21 @@ export const Assignment = (sequelize) => {
       allowNull: true,
     },
   });
+
+  Assignment.associate = (models) => {
+    Assignment.belongsTo(models.Course, {
+      foreignKey: "courseId",
+      as: "course",
+    });
+    Assignment.hasMany(models.Task, {
+      foreignKey: "assignmentId",
+      as: "tasks",
+    });
+    Assignment.hasMany(models.ChatLog, {
+      foreignKey: "assignmentId",
+      as: "chatLogs",
+    });
+  };
+
+  return Assignment;
 };

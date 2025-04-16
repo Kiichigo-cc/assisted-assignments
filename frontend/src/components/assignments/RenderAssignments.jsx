@@ -119,6 +119,7 @@ export function RenderAssignments({ course }) {
                     updateAssignments={updateAssignments}
                     _date={new Date(assignment.dueDate).toString()}
                     _name={assignment.name}
+                    _promptInstructions={assignment.promptInstructions}
                     _points={assignment.points}
                     _purpose={assignment.purpose}
                     _instructions={assignment.instructions}

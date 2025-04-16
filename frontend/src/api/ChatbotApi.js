@@ -33,7 +33,7 @@ export const fetchChatLogs = async (
   accessToken,
   userId = null,
   assignmentId = null,
-  limit = 100,
+  limit = 1000,
   offset = 0,
   instructorView = false
 ) => {

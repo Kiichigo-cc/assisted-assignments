@@ -1,9 +1,4 @@
-import {
-  CourseModel,
-  AssignmentModel,
-  TaskModel,
-  UserModel,
-} from "../server.js";
+import { Course, Assignment, Task, User } from "../server.js";
 
 export const createNewCourse = async (
   courseName,
@@ -11,7 +6,7 @@ export const createNewCourse = async (
   courseNumber,
   userId
 ) => {
-  const newCourse = await CourseModel.create({
+  const newCourse = await Course.create({
     courseName,
     term,
     courseNumber,
@@ -25,41 +20,41 @@ export const createNewCourse = async (
 };
 
 export const getCourseById = async (courseId) => {
-  return await CourseModel.findOne({
+  return await Course.findOne({
     where: { id: courseId },
     include: [
       {
-        model: AssignmentModel,
+        model: Assignment,
         as: "assignments",
         include: [
           {
-            model: TaskModel,
+            model: Task,
             as: "tasks",
             order: [["dueDate", "ASC"]],
           },
         ],
       },
-      { model: UserModel, as: "users" },
+      { model: User, as: "users" },
     ],
   });
 };
 
 // Fetch all courses for a user
 export const getAllCourses = async (userId) => {
-  return await CourseModel.findAll({
+  return await Course.findAll({
     include: [
       {
-        model: UserModel,
+        model: User,
         as: "users",
         where: { userId },
         required: true,
       },
       {
-        model: AssignmentModel,
+        model: Assignment,
         as: "assignments",
         include: [
           {
-            model: TaskModel,
+            model: Task,
             as: "tasks",
             order: [["dueDate", "ASC"]],
           },
@@ -71,10 +66,10 @@ export const getAllCourses = async (userId) => {
 
 // Fetch all users in a course by courseId
 export const getUsersInCourse = async (courseId) => {
-  return await UserModel.findAll({
+  return await User.findAll({
     include: [
       {
-        model: CourseModel,
+        model: Course,
         as: "courses",
         where: {
           id: courseId,

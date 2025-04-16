@@ -1,7 +1,7 @@
 import { getAssignmentById } from "../queries/assignmentQueries.js";
 import { getAllCourses } from "../queries/courseQueries.js";
-import { ChatLogModel } from "../server.js";
-import { AssignmentModel } from "../server.js";
+import { ChatLog } from "../server.js";
+import { Assignment } from "../server.js";
 import { genAI, model } from "../server.js";
 
 export const chat = async (req, res) => {
@@ -12,7 +12,7 @@ export const chat = async (req, res) => {
     const userMessage = req.body.message;
     const assignmentId = req.body.assignmentId;
     //const assignmentContext = req.body.assignmentContext;
-    let assignmentContext;
+    let assignmentContext, promptInstructions;
     console.log("Received assignment context:", assignmentContext);
 
     if (assignmentId) {
@@ -24,25 +24,27 @@ export const chat = async (req, res) => {
         }\nInstructions: ${assignment.instructions}\n
         Submission Details: ${assignment.submission}\nGrading Criteria: ${
           assignment.grading
-        }\nPoints: ${assignment.points}\nDue Date: ${
-          assignment.dueDate
+          // }\nPoints: ${assignment.points}\nDue Date: ${
+          //   assignment.dueDate
         }\nTasks: ${assignment.tasks
           .map((task) => JSON.stringify(task))
           .join(", ")}`;
       }
+      promptInstructions =
+        assignment?.promptInstructions || "Answer the question.";
     }
     console.log("Received assignment context:", assignmentContext);
 
     // A test to try to get Gemini to remember previous responses. Arbitrarily set to 10.
-    const previousMessages = await ChatLogModel.findAll({
-      where: { userId },
+    const previousMessages = await ChatLog.findAll({
+      where: { userId, assignmentId },
       order: [["timestamp", "ASC"]],
-      limit: 100,
+      limit: 1000,
     });
 
     // Format the previous messages.
     const history = previousMessages.map((log) => ({
-      role: log.sender === "user" ? "user" : "assistant",
+      role: log.sender === "user" ? "user" : "model",
       parts: [{ text: log.message }],
     }));
 
@@ -53,7 +55,14 @@ export const chat = async (req, res) => {
           : JSON.stringify(assignmentContext);
       const modifiedContextString = `This is the context of an assignment, answer any questions with this context: ${contextString}`;
       //history.unshift({ role: "user", parts: [{text: assignmentContext }] });
-      history.push({ role: "user", parts: [{ text: contextString }] });
+      history.push({
+        role: "user",
+        parts: [
+          {
+            text: `Follow these prompt instructions: ${promptInstructions}. ${contextString}. `,
+          },
+        ],
+      });
     }
 
     // Push the current user message onto the stack of messages.
@@ -66,7 +75,7 @@ export const chat = async (req, res) => {
     //const result = await model.generateContent(userMessage);
     const reply = result.response.text();
 
-    await ChatLogModel.create({
+    await ChatLog.create({
       chatId: `chat-${Date.now()}`,
       userId: userId,
       userName: userName,
@@ -75,7 +84,7 @@ export const chat = async (req, res) => {
       ...(assignmentId && { assignmentId }),
     });
 
-    await ChatLogModel.create({
+    await ChatLog.create({
       chatId: `chat-${Date.now()}`,
       userId: userId,
       userName: "TD3A AI",
@@ -94,7 +103,7 @@ export const chat = async (req, res) => {
 export const getInstructorChatLogs = async (req, res) => {
   try {
     const instructorId = req.user.sub;
-    const { userId, assignmentId, limit = 100, offset = 0 } = req.query;
+    const { userId, assignmentId, limit = 1000, offset = 0 } = req.query;
 
     // Build query options
     const queryOptions = {
@@ -126,7 +135,7 @@ export const getInstructorChatLogs = async (req, res) => {
       queryOptions.where.userId = userId;
     }
 
-    const chatLogs = await ChatLogModel.findAll(queryOptions);
+    const chatLogs = await ChatLog.findAll(queryOptions);
 
     res.json(chatLogs);
   } catch (error) {
@@ -138,7 +147,7 @@ export const getInstructorChatLogs = async (req, res) => {
 export const getUserChatLogs = async (req, res) => {
   try {
     const userId = req.user.sub;
-    const { assignmentId, limit = 100, offset = 0 } = req.query;
+    const { assignmentId, limit = 1000, offset = 0 } = req.query;
 
     // Build query options
     const queryOptions = {
@@ -154,7 +163,7 @@ export const getUserChatLogs = async (req, res) => {
 
     queryOptions.where.userId = userId;
 
-    const chatLogs = await ChatLogModel.findAll(queryOptions);
+    const chatLogs = await ChatLog.findAll(queryOptions);
 
     res.json(chatLogs);
   } catch (error) {

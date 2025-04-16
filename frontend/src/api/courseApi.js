@@ -94,29 +94,6 @@ export const joinCourse = async (accessCode, user, accessToken) => {
   }
 };
 
-// Generate invite code for a course
-export const generateInviteCode = async (courseId, accessToken) => {
-  try {
-    const response = await fetch(`${apiBaseUrl}/generate-access-code`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ courseId }),
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error("Failed to generate invite code");
-    }
-
-    return { success: true, accessCode: data.accessCode };
-  } catch (error) {
-    return { success: false, error: error.message };
-  }
-};
-
 // Update course details
 export const updateCourse = async (courseId, updatedCourse, accessToken) => {
   try {

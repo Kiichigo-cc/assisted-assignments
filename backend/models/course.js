@@ -1,9 +1,7 @@
-import { DataTypes } from "sequelize";
-
-export const Course = (sequelize) => {
-  return sequelize.define("Course", {
+export default (sequelize, DataTypes) => {
+  const Course = sequelize.define("Course", {
     id: {
-      type: DataTypes.UUID, // Using UUID for unique ID
+      type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       primaryKey: true,
@@ -26,4 +24,20 @@ export const Course = (sequelize) => {
       defaultValue: DataTypes.NOW,
     },
   });
+
+  Course.associate = (models) => {
+    Course.hasMany(models.Assignment, {
+      foreignKey: "courseId",
+      as: "assignments",
+    });
+
+    Course.belongsToMany(models.User, {
+      through: models.UserCourses,
+      as: "users",
+      foreignKey: "CourseId",
+      otherKey: "UserUserId",
+    });
+  };
+
+  return Course;
 };

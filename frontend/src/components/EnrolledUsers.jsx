@@ -24,7 +24,7 @@ export function EnrolledUsers({ users }) {
               <div className="flex flex-row space-x-4 items-center">
                 <Avatar>
                   <AvatarImage src={user.profilePicture} alt="@shadcn" />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarFallback>{user.name[0]}</AvatarFallback>
                 </Avatar>
                 <div className="font-medium">{user.name}</div>
               </div>
