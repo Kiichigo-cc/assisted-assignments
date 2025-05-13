@@ -54,9 +54,16 @@ function DynamicBreadcrumb() {
             </BreadcrumbLink>
           </BreadcrumbItem>
         ) : null}
+        {location.pathname.includes("reports") ? (
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to="/reports">Reports</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        ) : null}
 
         {/* If there's a courseId, display the course breadcrumb */}
-        {courseId ? (
+        {courseId && courseTitle ? (
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -73,7 +80,7 @@ function DynamicBreadcrumb() {
         ) : null}
 
         {/* If there's an assignmentId, display the assignment breadcrumb */}
-        {assignmentId ? (
+        {assignmentId && assignmentTitle ? (
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>

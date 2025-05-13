@@ -11,10 +11,10 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { fetchAssignmentData } from "../../api/AssignmentApi";
 import { Button } from "@/components/ui/button";
-import { MessageCircle } from "lucide-react";
+import { ChartBar, MessageCircle } from "lucide-react";
 import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
 import { useNavigate } from "react-router-dom";
-import StudentActivitySheet from "./StudentActivitySheet.jsx";
+import AssignmentDropdown from "./AssignmentDropdown";
 
 const AssignmentPage = () => {
   const { courseId, assignmentId } = useParams();
@@ -22,17 +22,14 @@ const AssignmentPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { accessToken } = useAccessToken();
-  const navigate = useNavigate();
   const setBreadcrumbs = useBreadcrumbStore((state) => state.setBreadcrumbs);
 
-  const handleChatbotClick = () => {
-    const encodedPurpose = encodeURIComponent(assignmentData.purpose || "N/A");
-    const encodedInstructions = encodeURIComponent(
-      assignmentData.instructions || "N/A"
+  const updateAssignments = (a) => {
+    const found = a.find(
+      (assignment) => assignment.id === parseInt(assignmentId)
     );
-    navigate(`/chatbot?assignmentId=${assignmentId}`);
+    setAssignmentData(found);
   };
-
   useEffect(() => {
     if (!accessToken) {
       //setError("Access token is missing");
@@ -77,7 +74,14 @@ const AssignmentPage = () => {
   return (
     <Card>
       <CardHeader className="flex flex-col">
-        <CardTitle>{assignmentData.name}</CardTitle>
+        <div className="flex flex-row justify-between">
+          <CardTitle>{assignmentData.name}</CardTitle>
+          <AssignmentDropdown
+            assignment={assignmentData}
+            course={assignmentData.course}
+            updateAssignments={updateAssignments}
+          />
+        </div>
         <div className="py-2 space-x-2 flex flex-row">
           <Link to={`/chatbot?assignmentId=${assignmentData.id}`}>
             <Button>
@@ -85,16 +89,18 @@ const AssignmentPage = () => {
               Ask Chatbot
             </Button>
           </Link>
-          <StudentActivitySheet
-            users={assignmentData.course.users}
-            assignmentData={assignmentData}
-          />
+          <Link to={`/reports/${courseId}/${assignmentId}`}>
+            <Button variant="outline">
+              <ChartBar />
+              View Student Metrics
+            </Button>
+          </Link>
         </div>
       </CardHeader>
       <CardContent>
         {assignmentData ? (
           <div className="space-y-2">
-            <div>
+            {/* <div>
               <div>
                 <strong>Points:</strong> {assignmentData.points} |{" "}
                 <strong>Due:</strong>{" "}
@@ -108,7 +114,7 @@ const AssignmentPage = () => {
                 })}
               </div>
               <Separator className="mt-2" />
-            </div>
+            </div> */}
             <div>
               <div className="text-[20px] font-semibold">Purpose</div>
               <div>{assignmentData.purpose || "N/A"}</div>
@@ -148,7 +154,7 @@ const AssignmentPage = () => {
                           {task.title}
                         </CardTitle>
                       </Link>
-                      <CardDescription>
+                      {/* <CardDescription>
                         {task.points} pts | Due:{" "}
                         {new Date(task.dueDate).toLocaleString("en-US", {
                           month: "2-digit",
@@ -158,7 +164,7 @@ const AssignmentPage = () => {
                           minute: "2-digit",
                           hour12: true,
                         })}
-                      </CardDescription>
+                      </CardDescription> */}
                     </div>
                   ))}
                 </ul>

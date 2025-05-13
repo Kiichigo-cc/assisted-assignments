@@ -1,4 +1,4 @@
-import { User, Task, Assignment } from "../server.js";
+import { User, Task, Assignment, Course } from "../server.js";
 import {
   createNewCourse,
   getCourseById,
@@ -138,5 +138,43 @@ export const updateCourse = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Failed to update course" });
+  }
+};
+
+export const joinCourse = async (req, res) => {
+  const { accessCode } = req.body;
+  const userId = req.body.user.sub;
+  const name = req.body.user.nickname;
+  const picture = req.body.user.picture;
+
+  if (!accessCode) {
+    return res.status(400).json({ error: "Access code is required" });
+  }
+
+  const course = await Course.findByPk(accessCode);
+
+  if (!course) {
+    return res.status(404).json({ error: "Course not found" });
+  }
+
+  try {
+    let user = await User.findByPk(userId);
+    if (!user) {
+      user = await User.create({
+        userId,
+        profilePicture: picture,
+        name,
+      });
+    }
+
+    await course.addUser(user, { through: { role: "student" } });
+
+    return res.status(200).json({
+      message: `Successfully joined course ${course.courseName}`,
+      accessCode,
+    });
+  } catch (error) {
+    console.error("Error joining course:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };

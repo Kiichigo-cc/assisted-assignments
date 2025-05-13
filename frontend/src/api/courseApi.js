@@ -46,6 +46,27 @@ export const fetchCourse = async (courseId, accessToken) => {
   }
 };
 
+export const fetchAllCourses = async (accessToken) => {
+  try {
+    const response = await fetch(`${apiBaseUrl}/courses`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error("Error fetching courses");
+    }
+
+    return { success: true, courses: data };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};
+
 // Delete a course
 export const deleteCourse = async (courseId, accessToken) => {
   try {
@@ -70,7 +91,7 @@ export const deleteCourse = async (courseId, accessToken) => {
 // Join a course
 export const joinCourse = async (accessCode, user, accessToken) => {
   try {
-    const response = await fetch(`${apiBaseUrl}/join-course`, {
+    const response = await fetch(`${apiBaseUrl}/courses/join-course`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

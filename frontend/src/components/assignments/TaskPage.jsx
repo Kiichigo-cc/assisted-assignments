@@ -62,7 +62,7 @@ const TaskPage = () => {
       <CardContent>
         {taskData ? (
           <div className="space-y-2">
-            <strong>Points:</strong> {taskData.points} | <strong>Due:</strong>{" "}
+            {/* <strong>Points:</strong> {taskData.points} | <strong>Due:</strong>{" "}
             {new Date(taskData.dueDate).toLocaleString("en-US", {
               month: "2-digit",
               day: "2-digit",
@@ -70,7 +70,7 @@ const TaskPage = () => {
               hour: "2-digit",
               minute: "2-digit",
               hour12: true,
-            })}
+            })} */}
             <Separator className="mt-2" />
             <div>{taskData.description}</div>
           </div>

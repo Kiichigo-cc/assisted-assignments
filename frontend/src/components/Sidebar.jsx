@@ -1,14 +1,4 @@
-import {
-  Calendar,
-  Home,
-  Inbox,
-  Search,
-  Settings,
-  Users,
-  Book,
-  MessageCircle,
-  EllipsisVertical,
-} from "lucide-react";
+import { Home, Settings, Book, MessageCircle, ChartBar } from "lucide-react";
 
 import {
   Sidebar,
@@ -25,7 +15,7 @@ import {
 import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "./LoginButton";
 import { NavUser } from "./nav-user";
-import useAccessToken from "@/hooks/useAccessToken";
+import InstructorAccess from "./user-permissions/InstructorAccess";
 
 // Menu items.
 const items = [
@@ -39,15 +29,17 @@ const items = [
     url: "/courses",
     icon: Book,
   },
-  // {
-  //   title: "Chatbot",
-  //   url: "/chatbot",
-  //   icon: MessageCircle,
-  // },
+  {
+    title: "Student Metrics",
+    url: "/reports",
+    icon: ChartBar,
+    requiresInstructor: true,
+  },
   {
     title: "Chatlogs",
     url: "/chatlogs",
     icon: MessageCircle,
+    requiresInstructor: true,
   },
   {
     title: "Settings",
@@ -58,7 +50,6 @@ const items = [
 
 export default function AppSidebar() {
   const { user, isAuthenticated, isLoading } = useAuth0();
-  const { scopes } = useAccessToken();
 
   return (
     <Sidebar>
@@ -68,13 +59,7 @@ export default function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
-                if (
-                  item.title === "Chatlogs" &&
-                  (scopes?.length === 0 || !scopes)
-                ) {
-                  return null;
-                }
-                return (
+                const itemContent = (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <a href={item.url}>
@@ -84,11 +69,20 @@ export default function AppSidebar() {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
+
+                return item.requiresInstructor ? (
+                  <InstructorAccess key={item.title}>
+                    {itemContent}
+                  </InstructorAccess>
+                ) : (
+                  itemContent
+                );
               })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
       <SidebarFooter>
         {isLoading ? null : isAuthenticated ? (
           <NavUser user={user} />
