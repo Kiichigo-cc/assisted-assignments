@@ -96,7 +96,6 @@ export default function Courses() {
   const [accessCode, setAccessCode] = useState(""); // State for the input field
   const [open, setOpen] = useState(false);
   const [openCourseForm, setOpenCourseForm] = useState(false);
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -229,7 +228,6 @@ export default function Courses() {
     };
 
     const RenderDialogContent = ({ course }) => {
-      console.log(course);
       const [courseName, setCourseName] = useState(course.courseName);
       const [term, setTerm] = useState(course.term);
       const [courseNumber, setCourseNumber] = useState(course.courseNumber);

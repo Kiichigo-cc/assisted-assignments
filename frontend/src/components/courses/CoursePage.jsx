@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -36,7 +29,6 @@ export function CoursePage() {
   const [loading, setLoading] = useState(true);
   const { accessToken } = useAccessToken();
   const [enrolledUsers, setEnrolledUsers] = useState(null);
-  const [inviteCode, setInviteCode] = useState(""); // Store invite code
 
   const setBreadcrumbs = useBreadcrumbStore((state) => state.setBreadcrumbs);
 
