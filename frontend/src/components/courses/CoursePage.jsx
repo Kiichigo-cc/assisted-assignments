@@ -57,14 +57,14 @@ export function CoursePage() {
   return course ? (
     <Card className="border-none shadow-none w-full">
       <CardHeader>
-        <div className="flex flex-row items-center">
+        <div className="flex sm:flex-row flex-col sm:items-center sm:justify-between justify-start gap-2">
           <CardTitle>
             {course.courseNumber} - {course.courseName} {`(${course.term})`}
           </CardTitle>
           <InstructorAccess>
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="ml-auto">Invite Code</Button>
+                <Button className="">Invite Code</Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>

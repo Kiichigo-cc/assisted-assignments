@@ -83,7 +83,7 @@ const AssignmentDialog = ({
   const handleAddTask = () =>
     setTasks([
       ...tasks,
-      { title: "", description: "", points: "", dueDate: "", dueTime: "" },
+      { title: "", description: "", points: null, dueDate: "", dueTime: "" },
     ]);
   const handleRemoveTask = (index) =>
     setTasks(tasks.filter((_, i) => i !== index));
@@ -127,7 +127,7 @@ const AssignmentDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {children}
-      <DialogContent className="sm:max-w-[925px] max-h-[90vh] overflow-auto">
+      <DialogContent className="sm:max-w-[925px] max-h-[80vh] overflow-auto">
         <DialogHeader>
           <DialogTitle>
             {assignmentId ? "Edit Assignment" : "Add Assignment"}
@@ -181,8 +181,7 @@ const AssignmentDialog = ({
               + Add Task
             </Button>
           </div>
-
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 gap-4">
             {tasks.map((task, index) => (
               <Card key={index}>
                 <CardHeader className="flex flex-row items-center">
