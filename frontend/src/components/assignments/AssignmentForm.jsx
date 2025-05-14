@@ -181,7 +181,6 @@ const AssignmentDialog = ({
               + Add Task
             </Button>
           </div>
-
           <div className="grid sm:grid-cols-2 gap-4">
             {tasks.map((task, index) => (
               <Card key={index}>
