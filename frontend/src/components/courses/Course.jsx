@@ -377,13 +377,13 @@ export default function Courses() {
 
   return (
     <Card className="w-full border-none shadow-none">
-      <CardHeader className="flex flex-row items-center">
+      <CardHeader className="flex sm:flex-row flex-col sm:items-center sm:justify-between justify-start">
         <CardTitle>Courses</CardTitle>
-        <div className="ml-auto space-x-2">
+        <div className="flex flex-row gap-2">
           <InstructorAccess>
             <Dialog open={openCourseForm} onOpenChange={setOpenCourseForm}>
               <DialogTrigger asChild>
-                <Button className="ml-auto">+ Add Course</Button>
+                <Button className="">+ Add Course</Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -414,7 +414,7 @@ export default function Courses() {
           </InstructorAccess>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button className="ml-auto">Join a Course</Button>
+              <Button className="">Join a Course</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>

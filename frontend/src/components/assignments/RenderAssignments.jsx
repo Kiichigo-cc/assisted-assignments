@@ -48,14 +48,14 @@ export function RenderAssignments({ course }) {
   }
   return (
     <div className="mt-8">
-      <div className="flex flex-row items-center">
+      <div className="flex sm:flex-row flex-col sm:items-center sm:justify-between justify-start gap-2">
         <h2 className="text-2xl font-semibold">Assignments</h2>
         <InstructorAccess>
           <AssignmentDialog
             updateAssignments={updateAssignments}
             children={
               <DialogTrigger asChild>
-                <Button className="ml-auto">+ Add Assignment</Button>
+                <Button className="">+ Add Assignment</Button>
               </DialogTrigger>
             }
           />

@@ -163,15 +163,6 @@ export function CourseAssignmentSelector() {
             </div>
           </div>
         </div>
-
-        {/* Mobile View Display */}
-        {selectedCourseId && selectedAssignmentId && (
-          <div className="md:hidden flex items-center text-sm text-slate-500 mt-4">
-            <span>{getCourseName(selectedCourseId)}</span>
-            <ChevronRight className="h-4 w-4 mx-1" />
-            <span>{getAssignmentName(selectedAssignmentId)}</span>
-          </div>
-        )}
       </CardContent>
     </Card>
   );
