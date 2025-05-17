@@ -1,4 +1,5 @@
 # Assisted Assignments
+![Logo](logo.png)
 
 ## A web-based tool for creating and executing task-delineated, collaborative, AI-assisted assignments
 
