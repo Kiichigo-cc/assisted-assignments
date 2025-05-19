@@ -5,9 +5,11 @@
 
 # Download / Usage / Installation / Deployment Guide
 
-Visit the project presentation page here: https://kiichigo-cc.github.io/td3a-landing/
+Visit the [Project Presentation Page](https://kiichigo-cc.github.io/td3a-landing/)
 
-Visit the project website here: https://assisted-assignments.vercel.app/
+Visit the [Project Website](https://assisted-assignments.vercel.app/)
+
+View the [Deployment Instructions](Deployment.md)
 
 # Running Locally
 ## 1. Resources to Setup/Install
