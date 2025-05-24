@@ -112,6 +112,18 @@ Enter the course name, term indicator, and course number. Then click "Save Chang
 
 After creating the course, an access code will be generated. Share this code with students to allow them to join.
 
+## Adding an Assignment
+
+Adding an assignment requires multiple entries. Enter in the prompts in the photo attached which consist of:
+Assignment Name, Purpose, Instructions, Submission Details, Grading Criteria, and AI Instructions.
+![image](https://github.com/user-attachments/assets/4651b1ea-39b8-4447-af1f-24bb38bb832d)
+
+## Adding tasks
+
+At the bottom of each assignment creation object, you can click the Add Task button to add a new task.
+The new task you have created can have its own name and instructions within them.
+![image](https://github.com/user-attachments/assets/ce620224-687b-48e0-89a8-8ea9333e5eac)
+
 ---
 
 # Student User Guide
