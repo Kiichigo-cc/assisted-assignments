@@ -145,6 +145,12 @@ Click the orange "Join Course" button at the top right of the dashboard.
 Paste the access code provided by your instructor to join the course.  
 ![Enter Access Code](https://github.com/user-attachments/assets/b4ab72a1-a80c-4d41-bf40-067647016b63)
 
+## Interacting with the AI Chatbot
+
+After opening the AI chatbot via the navigation bar in the assignment page, students can speak to an AI assistance chatbot.
+![image](https://github.com/user-attachments/assets/5bc03749-dd3d-4ca6-8c6d-a20b09f2202d)
+
+Enter in prompts in the text box at the bottom and submit your questions to the AI Chatbot. An automatically generated response will be output to assist.
 ---
 
 # Support and Contact Information
