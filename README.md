@@ -133,8 +133,9 @@ Click the orange "Join Course" button at the top right of the dashboard.
 Paste the access code provided by your instructor to join the course.  
 ![Enter Access Code](https://github.com/user-attachments/assets/b4ab72a1-a80c-4d41-bf40-067647016b63)
 
+---
 
-## Support and Contact Information
+# Support and Contact Information
 Please send any questions you have about the project or implementation to any of our team members who worked on this project:
 
 - **Collin Kimball**  
