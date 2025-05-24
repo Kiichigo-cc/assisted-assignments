@@ -87,7 +87,7 @@ After running the frontend and backend you will be able to access the applicatio
 
 
 
-## Contact Information
+## Support and Contact Information
 Please send any questions you have about the project or implementation to any of our team members who worked on this project:
 
 - **Collin Kimball**  
