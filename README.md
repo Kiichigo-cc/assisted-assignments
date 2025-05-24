@@ -11,6 +11,8 @@ Visit the [Project Website](https://assisted-assignments.vercel.app/)
 
 View the [Deployment Instructions](Deployment.md)
 
+View the [API Docs](https://app.swaggerhub.com/apis-docs/assistedassignments/TD3A/1.0.0)
+
 # Running Locally
 ## 1. Resources to Setup/Install
 - **Google Gemini Integration**: Get a [Google Gemin API Key](https://ai.google.dev/gemini-api/docs/api-key)
