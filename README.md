@@ -85,7 +85,37 @@ npm start
 ```
 After running the frontend and backend you will be able to access the application at http://localhost:5173/
 
+# Instructor User Guides
 
+## Logging in
+Find the log in button at the bottom left of the homepage.
+![image](https://github.com/user-attachments/assets/e5da3e07-535b-44d9-a269-d2184f5ead1d)
+
+Follow through the instructions on-screen to log into your account or create an account.
+You must be designated as an instructor to create assignments, so please contact an administrator to be designated as such.
+
+## Creating a Course
+Click on the left orange button at the top right of the dashboard to create A course.
+![image](https://github.com/user-attachments/assets/1da87a13-a541-47b8-a6c1-04aec8832af4)
+
+Next, add a course name, term indicator, and course number. Then, click save changes.
+![image](https://github.com/user-attachments/assets/aa667747-d3f8-4b0b-b7bf-25972ac873c7)
+Your course will give an access code that students can use to join your course.
+
+# Student User Guides
+
+## Logging in 
+Find the log in button at the bottom left of the homepage.
+![image](https://github.com/user-attachments/assets/1a40c0fd-1c13-455e-813a-e8abb607f47e)
+
+Follow through the instructions on-screen to log into your account or create an account.
+
+## Joining a Course
+Click the only orange button on the top right of the dashboard to join a course.
+![image](https://github.com/user-attachments/assets/5f163d24-d895-49ed-a521-5a547e59bb75)
+
+Paste the provided access code from the instructor to join the course.
+![image](https://github.com/user-attachments/assets/b4ab72a1-a80c-4d41-bf40-067647016b63)
 
 ## Support and Contact Information
 Please send any questions you have about the project or implementation to any of our team members who worked on this project:
