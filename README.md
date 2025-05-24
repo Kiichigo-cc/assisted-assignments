@@ -84,3 +84,24 @@ npm install
 npm start
 ```
 After running the frontend and backend you will be able to access the application at http://localhost:5173/
+
+
+
+## Contact Information
+Please send any questions you have about the project or implementation to any of our team members who worked on this project:
+
+- **Collin Kimball**  
+  Email: [kimbacol@oregonstate.edu](mailto:kimbacol@oregonstate.edu)
+
+- **Oliver Zhou**  
+  Email: [oliveryzhou@gmail.com](mailto:oliveryzhou@gmail.com)
+
+- **Ethan Lu**  
+  Email: [luet@oregonstate.edu](mailto:luet@oregonstate.edu)
+
+- **Sai Meenakshisundaram**  
+  Email: [meenkass@oregonstate.edu](mailto:meenkass@oregonstate.edu)
+
+- **Trent Matsumura**  
+  Email: [matsumut@oregonstate.edu](mailto:matsumut@oregonstate.edu)
+
