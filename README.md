@@ -3,7 +3,7 @@
 
 ## A web-based tool for creating and executing task-delineated, collaborative, AI-assisted assignments
 
-# Download / Usage / Installation / Deployment Guide
+# Technical Documentation: Download / Installation / Deployment Guide
 
 Visit the [Project Presentation Page](https://kiichigo-cc.github.io/td3a-landing/)
 
@@ -85,7 +85,7 @@ npm start
 ```
 After running the frontend and backend you will be able to access the application at http://localhost:5173/
 
-# User Guides
+# User Guides: Teachers and Students
 
 ---
 
