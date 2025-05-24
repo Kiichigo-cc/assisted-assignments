@@ -85,37 +85,54 @@ npm start
 ```
 After running the frontend and backend you will be able to access the application at http://localhost:5173/
 
-# Instructor User Guides
+# User Guides
 
-## Logging in
-Find the log in button at the bottom left of the homepage.
-![image](https://github.com/user-attachments/assets/e5da3e07-535b-44d9-a269-d2184f5ead1d)
+---
 
-Follow through the instructions on-screen to log into your account or create an account.
-You must be designated as an instructor to create assignments, so please contact an administrator to be designated as such.
+# Instructor User Guide
+
+## Logging In
+
+Find the login button at the bottom left of the homepage.  
+![Login Button](https://github.com/user-attachments/assets/e5da3e07-535b-44d9-a269-d2184f5ead1d)
+
+Follow the on-screen instructions to log into your account or create a new one.
+
+Note: You must be designated as an instructor to create assignments. Please contact an administrator to receive instructor privileges.
+
+---
 
 ## Creating a Course
-Click on the left orange button at the top right of the dashboard to create A course.
-![image](https://github.com/user-attachments/assets/1da87a13-a541-47b8-a6c1-04aec8832af4)
 
-Next, add a course name, term indicator, and course number. Then, click save changes.
-![image](https://github.com/user-attachments/assets/aa667747-d3f8-4b0b-b7bf-25972ac873c7)
-Your course will give an access code that students can use to join your course.
+Click the orange "Create a Course" button at the top right of the dashboard.  
+![Create Course](https://github.com/user-attachments/assets/1da87a13-a541-47b8-a6c1-04aec8832af4)
 
-# Student User Guides
+Enter the course name, term indicator, and course number. Then click "Save Changes."  
+![Course Details](https://github.com/user-attachments/assets/aa667747-d3f8-4b0b-b7bf-25972ac873c7)
 
-## Logging in 
-Find the log in button at the bottom left of the homepage.
-![image](https://github.com/user-attachments/assets/1a40c0fd-1c13-455e-813a-e8abb607f47e)
+After creating the course, an access code will be generated. Share this code with students to allow them to join.
 
-Follow through the instructions on-screen to log into your account or create an account.
+---
+
+# Student User Guide
+
+## Logging In
+
+Find the login button at the bottom left of the homepage.  
+![Login Button](https://github.com/user-attachments/assets/1a40c0fd-1c13-455e-813a-e8abb607f47e)
+
+Follow the on-screen instructions to log into your account or create a new one.
+
+---
 
 ## Joining a Course
-Click the only orange button on the top right of the dashboard to join a course.
-![image](https://github.com/user-attachments/assets/5f163d24-d895-49ed-a521-5a547e59bb75)
 
-Paste the provided access code from the instructor to join the course.
-![image](https://github.com/user-attachments/assets/b4ab72a1-a80c-4d41-bf40-067647016b63)
+Click the orange "Join Course" button at the top right of the dashboard.  
+![Join Course](https://github.com/user-attachments/assets/5f163d24-d895-49ed-a521-5a547e59bb75)
+
+Paste the access code provided by your instructor to join the course.  
+![Enter Access Code](https://github.com/user-attachments/assets/b4ab72a1-a80c-4d41-bf40-067647016b63)
+
 
 ## Support and Contact Information
 Please send any questions you have about the project or implementation to any of our team members who worked on this project:
