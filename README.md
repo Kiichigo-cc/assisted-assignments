@@ -13,6 +13,22 @@ View the [Deployment Instructions](Deployment.md)
 
 View the [API Docs](https://app.swaggerhub.com/apis-docs/assistedassignments/TD3A/1.0.0)
 
+# Features
+- Create organized assignments and tasks
+- Configure chatbots for assignments
+- Track and analyze student activity
+- Exportable asignment objects for Canvas
+
+# Tech Stack
+- React.js - Frontend
+- Zustand - State Management
+- TailwindCSS - Styling
+- shadcn/ui - Design System
+- Node.js - Backend
+- Redis - Cache
+- PostgreSQL - Database
+- Sequelize - Database ORM
+
 # Running Locally
 ## 1. Resources to Setup/Install
 - **Google Gemini Integration**: Get a [Google Gemin API Key](https://ai.google.dev/gemini-api/docs/api-key)
@@ -125,6 +141,22 @@ Assignment Name, Purpose, Instructions, Submission Details, Grading Criteria, an
 At the bottom of each assignment creation object, you can click the Add Task button to add a new task.
 The new task you have created can have its own name and instructions within them.
 ![image](https://github.com/user-attachments/assets/ce620224-687b-48e0-89a8-8ea9333e5eac)
+
+## Viewing Student Metrics
+
+Access the "Student Metrics" tab in the sidebar.
+
+Click on the Course dropdown to select a course, next click on the Assignment dropdown to select an assignment.
+![image](https://github.com/user-attachments/assets/d4016981-69c3-4ba5-badd-8cb5fa5f837b)
+
+Clicking on the "Show Filter" button will allow you to filter students within the Student Performance Table.
+![image](https://github.com/user-attachments/assets/76c5fb0b-5d8c-435e-aceb-f120b45e3e6c)
+
+Clicking on a students name in the "Issues Report" table will allow you to view any issues that the student had with the assignment.
+![image](https://github.com/user-attachments/assets/a81ddd9f-0b41-4958-9767-b5dd20bab135)
+
+
+
 
 ---
 
