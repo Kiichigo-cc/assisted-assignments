@@ -18,6 +18,7 @@ import { X } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { createAssignment, updateAssignment } from "../../api/AssignmentApi";
 
+// FormField component to handle different input types
 const FormField = ({
   id,
   value,
@@ -41,6 +42,7 @@ const FormField = ({
   </div>
 );
 
+// AssignmentDialog component to create or edit assignments
 const AssignmentDialog = ({
   updateAssignments = null,
   _tasks = [],
@@ -73,6 +75,7 @@ const AssignmentDialog = ({
   });
   const [open, setOpen] = useState(_open);
 
+  // Handlers for form data and task changes
   const handleChange = (field, value) =>
     setFormData((prev) => ({ ...prev, [field]: value }));
   const handleTaskChange = (index, field, value) =>
@@ -88,9 +91,11 @@ const AssignmentDialog = ({
   const handleRemoveTask = (index) =>
     setTasks(tasks.filter((_, i) => i !== index));
 
+  // Combine date and time into a single Date object
   const combineDateAndTime = (date, time) =>
     date && time ? new Date(`${format(date, "yyyy-MM-dd")}T${time}`) : null;
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const updatedTasks = tasks.map((task) => ({
@@ -106,7 +111,9 @@ const AssignmentDialog = ({
     try {
       let data;
 
+      // Validate required fields
       if (assignmentId) {
+        // If assignmentId exists, update the assignment
         data = await updateAssignment(
           courseId,
           assignmentId,
@@ -114,11 +121,12 @@ const AssignmentDialog = ({
           formDataToSend
         );
       } else {
+        // If assignmentId does not exist, create a new assignment
         data = await createAssignment(courseId, accessToken, formDataToSend);
       }
 
-      setOpen(false);
-      if (updateAssignments) updateAssignments(data);
+      setOpen(false); // Close the dialog after submission
+      if (updateAssignments) updateAssignments(data); // Update assignments in parent component
     } catch (error) {
       console.error("Error creating assignment and tasks:", error);
     }

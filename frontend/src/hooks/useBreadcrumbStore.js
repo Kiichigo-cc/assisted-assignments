@@ -1,6 +1,7 @@
 // useBreadcrumbStore.js
 import { create } from "zustand";
 
+// Zustand store for managing breadcrumb state in a React application
 const useBreadcrumbStore = create((set) => ({
   courseId: null,
   courseTitle: "",

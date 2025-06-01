@@ -1,5 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 
+// Middleware to check if the user is authenticated by decoding the JWT token
 export const checkUser = (req, res, next) => {
   const authHeader = req.headers["authorization"]; // Extract Authorization header
 

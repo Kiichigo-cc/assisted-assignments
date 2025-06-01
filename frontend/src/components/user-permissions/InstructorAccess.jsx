@@ -1,6 +1,7 @@
 import React from "react";
 import useAccessToken from "../../hooks/useAccessToken";
 
+// InstructorAccess component that checks if the user has instructor permissions
 const InstructorAccess = ({ children }) => {
   const { scopes } = useAccessToken();
   // Check if the user has instructor scopes

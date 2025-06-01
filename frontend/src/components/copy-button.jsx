@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Clipboard, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// CopyButton component that allows users to copy text to the clipboard
 const CopyButton = ({
   textToCopy,
   inactiveIcon = (

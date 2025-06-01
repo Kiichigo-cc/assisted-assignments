@@ -7,11 +7,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronRight } from "lucide-react";
 import useAccessToken from "@/hooks/useAccessToken";
 import { fetchAllCourses } from "../../api/courseApi";
 import { useNavigate, useParams } from "react-router-dom";
 
+// Selector component for choosing a course and assignment in the student metrics section.
 export function CourseAssignmentSelector() {
   const [courses, setCourses] = useState([]);
   const [selectedCourseId, setSelectedCourseId] = useState("");
@@ -83,13 +83,6 @@ export function CourseAssignmentSelector() {
       }
     }
   }, [selectedCourseId, selectedAssignmentId, navigate]);
-
-  const getCourseName = (courseId) =>
-    courses.find((c) => c.id === courseId)?.courseName || "";
-
-  const getAssignmentName = (assignmentId) =>
-    availableAssignments.find((a) => a.id === parseInt(assignmentId))?.name ||
-    "";
 
   return (
     <Card className="mb-6">

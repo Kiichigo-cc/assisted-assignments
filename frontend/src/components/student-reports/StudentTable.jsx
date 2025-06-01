@@ -31,6 +31,7 @@ import {
 import { Link, useParams } from "react-router-dom";
 import downloadChatLogs from "../assignments";
 
+// StudentTable component to display student performance metrics and allow filtering and sorting
 export function StudentTable({ studentsData, accessToken, assignment }) {
   const assignmentId = useParams().assignmentId;
   const [nameFilter, setNameFilter] = useState("");
@@ -49,6 +50,7 @@ export function StudentTable({ studentsData, accessToken, assignment }) {
     });
   };
 
+  // Function to download chat logs for all students and the assignment
   const handleDownloadAll = async (accessToken, users, assignmentData) => {
     for (const user of users) {
       await handleDownload(accessToken, user, assignmentData);
@@ -65,6 +67,7 @@ export function StudentTable({ studentsData, accessToken, assignment }) {
     setSortConfig({ key, direction });
   };
 
+  // Function to get the negative sentiment label based on the number of issues
   const getNegativeSentimentLabel = (student) => {
     const count = student.issues?.length || 0;
     if (count === 0) return "0 (None)";
@@ -73,6 +76,7 @@ export function StudentTable({ studentsData, accessToken, assignment }) {
     return `${count} (Severe)`;
   };
 
+  // Filter and sort students based on the current filters and sort configuration
   const filteredAndSortedStudents = () => {
     const result = studentsData.filter((student) => {
       if (

@@ -1,5 +1,6 @@
 import { fetchChatLogs } from "@/api/ChatbotApi";
 
+// Function to download chat logs for a specific assignment
 const downloadChatLogs = async ({
   accessToken,
   user,

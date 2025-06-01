@@ -40,8 +40,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import InstructorAccess from "../user-permissions/InstructorAccess";
-import { set } from "date-fns";
 
+// DialogButton component to handle dialog interactions for adding or updating courses
 export function DialogButton({
   buttonLabel,
   dialogTitle,
@@ -82,6 +82,7 @@ export function DialogButton({
   );
 }
 
+// Main Courses component to display and manage courses
 export default function Courses() {
   const resetBreadcrumbs = useBreadcrumbStore(
     (state) => state.resetBreadcrumbs
@@ -95,8 +96,8 @@ export default function Courses() {
   const { user } = useAuth0();
   const [accessCode, setAccessCode] = useState(""); // State for the input field
   const [open, setOpen] = useState(false);
-  const [openCourseForm, setOpenCourseForm] = useState(false);
-  const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
+  const [openCourseForm, setOpenCourseForm] = useState(false); // State for the course creation form
+  const [openUpdateDialog, setOpenUpdateDialog] = useState(false); // State for the update dialog
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
@@ -130,6 +131,7 @@ export default function Courses() {
     fetchCourses();
   }, [accessToken, open]);
 
+  // Function to handle course creation
   const handleSubmit = async () => {
     const newCourse = { courseName, term, courseNumber };
     setOpenCourseForm(false); // Close the form
@@ -151,6 +153,7 @@ export default function Courses() {
     }
   };
 
+  // Inputs for the course creation form
   const inputs = [
     {
       id: "courseName",
@@ -172,6 +175,7 @@ export default function Courses() {
     },
   ];
 
+  // Function to handle joining a course
   const handleJoinCourse = async () => {
     const { success, message } = await joinCourse(
       accessCode,
@@ -187,6 +191,7 @@ export default function Courses() {
     }
   };
 
+  // Function to handle course deletion and update
   const handleDelete = async (courseId) => {
     const { success, message } = await deleteCourse(courseId, accessToken);
 
@@ -200,6 +205,7 @@ export default function Courses() {
     }
   };
 
+  // Function to handle course updates
   const handleUpdate = async (courseId, updatedCourse) => {
     const { success, message } = await updateCourse(
       courseId,
@@ -219,6 +225,7 @@ export default function Courses() {
     }
   };
 
+  // Function to render the list of courses with actions
   const renderCourses = () => {
     const [selectedAction, setSelectedAction] = useState(null); // Track the selected action (Edit/Delete)
 
@@ -227,6 +234,7 @@ export default function Courses() {
       setOpenUpdateDialog(true);
     };
 
+    // Render the dialog content based on the selected action
     const RenderDialogContent = ({ course }) => {
       const [courseName, setCourseName] = useState(course.courseName);
       const [term, setTerm] = useState(course.term);
@@ -320,7 +328,7 @@ export default function Courses() {
     };
 
     return isLoading ? (
-      <div>Loading</div>
+      <div>Loading...</div>
     ) : (
       courses.map((course) => (
         <Card className="flex flex-row items-center py-2 px-4" key={course.id}>

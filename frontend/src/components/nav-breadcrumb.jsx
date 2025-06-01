@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import useBreadcrumbStore from "../hooks/useBreadcrumbStore";
 
+// DynamicBreadcrumb component that generates breadcrumbs based on the current route and Zustand store values
 function DynamicBreadcrumb() {
   // Get breadcrumb values from the Zustand store
 

@@ -10,6 +10,7 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 import InstructorAccess from "../user-permissions/InstructorAccess";
 import AssignmentDropdown from "./AssignmentDropdown";
 
+// RenderAssignments component that fetches and displays assignments for a course
 export function RenderAssignments({ course }) {
   const { accessToken } = useAccessToken();
   const [assignments, setAssignments] = useState(null);

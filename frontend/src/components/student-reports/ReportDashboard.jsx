@@ -9,6 +9,7 @@ import useAccessToken from "@/hooks/useAccessToken";
 import InstructorAccess from "../user-permissions/InstructorAccess";
 import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
 
+// Student report dashboard component that displays metrics and issues for a specific assignment
 export default function ReportDashboard() {
   const { courseId, assignmentId } = useParams();
   const [metrics, setMetrics] = useState(null);

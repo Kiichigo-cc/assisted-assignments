@@ -1,3 +1,6 @@
+// This file contains functions to interact with the chatbot API
+
+// View the chatbot response t o a user's message
 export async function fetchChatbotResponse(
   message,
   user,
@@ -29,6 +32,7 @@ export async function fetchChatbotResponse(
   }
 }
 
+// Fetch chat logs for a user or instructor
 export const fetchChatLogs = async (
   accessToken,
   userId = null,

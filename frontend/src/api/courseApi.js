@@ -46,6 +46,7 @@ export const fetchCourse = async (courseId, accessToken) => {
   }
 };
 
+// Fetch all courses
 export const fetchAllCourses = async (accessToken) => {
   try {
     const response = await fetch(`${apiBaseUrl}/courses`, {

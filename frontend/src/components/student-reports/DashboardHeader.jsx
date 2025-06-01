@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+// DashboardHeader component to display assignment and student metrics
 export function DashboardHeader({ studentsData, assignment }) {
   // Calculate summary statistics
   const totalStudents = studentsData.length;

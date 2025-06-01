@@ -23,6 +23,7 @@ import { fetchCourse } from "../../api/courseApi";
 import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
 import InstructorAccess from "../user-permissions/InstructorAccess";
 
+// Main component for displaying course details, assignments, and enrolled users
 export function CoursePage() {
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);
@@ -38,7 +39,7 @@ export function CoursePage() {
       if (result.success) {
         setCourse(result.course);
         setEnrolledUsers(result.users);
-        setBreadcrumbs(courseId, result.course.courseName, null, "", null, "");
+        setBreadcrumbs(courseId, result.course.courseName, null, "", null, ""); // Set breadcrumbs for the course page
         setLoading(false);
       } else {
         console.error(result.error);

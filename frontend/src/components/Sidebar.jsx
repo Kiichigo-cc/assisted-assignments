@@ -16,6 +16,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "./LoginButton";
 import { NavUser } from "./nav-user";
 import InstructorAccess from "./user-permissions/InstructorAccess";
+import Logo from "@/assets/logo.png";
 
 // Menu items.
 const items = [
@@ -55,7 +56,10 @@ export default function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel className="gap-2">
+            <img src={Logo} className="w-4" />
+            Assisted Assignments
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {

@@ -18,6 +18,7 @@ import CopyButton from "../copy-button";
 import { useNavigate } from "react-router-dom";
 import useAccessToken from "@/hooks/useAccessToken";
 
+// AssignmentDropdown component that provides options to edit, delete, or copy assignment details
 export default function AssignmentDropdown({
   assignment,
   course,

@@ -34,5 +34,3 @@ export const getMetricsAndIssues = async (
     return { success: false, message: error.message };
   }
 };
-
-// You can add other API calls below as needed (e.g., createCourse, etc.)

@@ -24,6 +24,7 @@ import InstructorAccess from "../user-permissions/InstructorAccess";
 import downloadChatLogs from "./index.js";
 import useAccessToken from "@/hooks/useAccessToken";
 
+// Function to handle downloading chat logs for a specific user
 const handleDownload = async (accessToken, user, assignmentData) => {
   await downloadChatLogs({
     accessToken,
@@ -33,6 +34,7 @@ const handleDownload = async (accessToken, user, assignmentData) => {
   });
 };
 
+// Function to handle downloading chat logs for all users in an assignment
 const handleDownloadAll = async (accessToken, users, assignmentData) => {
   for (const user of users) {
     await handleDownload(accessToken, user, assignmentData);
@@ -41,6 +43,7 @@ const handleDownloadAll = async (accessToken, users, assignmentData) => {
   await handleDownload(accessToken, null, assignmentData);
 };
 
+// Component to display a sheet for viewing student chat logs and downloading them
 export default function StudentActivitySheet({ users, assignmentData }) {
   const { accessToken } = useAccessToken();
   return (

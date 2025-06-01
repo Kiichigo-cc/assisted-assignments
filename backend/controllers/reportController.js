@@ -51,7 +51,6 @@ export const getMetrics = async (req, res) => {
 
       const totalActiveTime = calculateActiveTime(chatLogs);
 
-      // 🧠 Replace local logic with Gemini API call
       const geminiAnalysis = await analyzeWithGemini(
         student,
         assignment,
@@ -95,6 +94,7 @@ export const getMetrics = async (req, res) => {
 
 // Helper functions
 
+// Function to calculate total active time based on chat logs
 const calculateActiveTime = (chatLogs) => {
   const timestamps = chatLogs.map((log) => new Date(log.timestamp).getTime());
   let totalActiveTime = 0;
@@ -110,6 +110,7 @@ const calculateActiveTime = (chatLogs) => {
   return Math.round(totalActiveTime / 60000); // Convert ms to minutes
 };
 
+// Function to analyze chat logs using Gemini model
 const analyzeWithGemini = async (student, assignment, chatLogs) => {
   const cacheKey = `gemini:${student.userId}:${assignment.id}`;
   const currentMessageCount = chatLogs.length;
@@ -155,6 +156,7 @@ const analyzeWithGemini = async (student, assignment, chatLogs) => {
   }
 };
 
+// Prompt for Gemini model
 const prompt = (assignment, chatLogs) => `
 You are an AI education assistant.
 

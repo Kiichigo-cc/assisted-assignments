@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 
+// IssuesReport component to display students with issues and their details
 export function IssuesReport({ studentsData }) {
   // Filter students with at least one issue
   const studentsWithIssues = studentsData?.filter(

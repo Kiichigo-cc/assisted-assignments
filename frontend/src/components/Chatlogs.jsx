@@ -12,6 +12,7 @@ import ReactMarkdown from "react-markdown";
 import { fetchChatLogs } from "../api/ChatbotApi";
 import { useLocation } from "react-router-dom";
 
+// Chatlogs component that fetches and displays chat logs for a specific user and assignment
 const Chatlogs = () => {
   const [chatLogs, setChatLogs] = useState([]);
   const [loading, setLoading] = useState(true);

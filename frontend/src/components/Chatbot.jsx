@@ -12,6 +12,7 @@ import CopyButton from "./copy-button";
 import { useRef } from "react";
 import { ArrowDown } from "lucide-react";
 
+// Chatbot component that allows users to interact with a chatbot
 export default function Chatbot() {
   const { user } = useAuth0();
   const { search } = useLocation();
@@ -25,13 +26,9 @@ export default function Chatbot() {
 
   const urlParams = new URLSearchParams(search);
   const assignmentId = urlParams.get("assignmentId");
-  // const purpose = urlParams.get("purpose");
-  // const instructions = urlParams.get("instructions");
 
   const assignmentContext = {
     assignmentId,
-    // purpose,
-    // instructions,
   };
 
   useEffect(() => {

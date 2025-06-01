@@ -1,21 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import useAccessToken from "@/hooks/useAccessToken";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { fetchAssignmentData } from "../../api/AssignmentApi";
 import { Button } from "@/components/ui/button";
 import { ChartBar, MessageCircle } from "lucide-react";
 import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
-import { useNavigate } from "react-router-dom";
 import AssignmentDropdown from "./AssignmentDropdown";
 
+// Showcase the assignment page component that displays assignment details
 const AssignmentPage = () => {
   const { courseId, assignmentId } = useParams();
   const [assignmentData, setAssignmentData] = useState(null);
@@ -45,6 +39,7 @@ const AssignmentPage = () => {
           accessToken
         );
         setAssignmentData(data);
+        // Set the breadcrumbs for the assignment page
         setBreadcrumbs(
           courseId,
           data.course.courseName,

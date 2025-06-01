@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { fetchAssignmentTask } from "../../api/AssignmentApi";
 import useBreadcrumbStore from "../../hooks/useBreadcrumbStore.js";
 
+// TaskPage component that displays details of a specific assignment task
 const TaskPage = () => {
   const { courseId, assignmentId, taskId } = useParams(); // Get assignment ID from URL params
   const [taskData, setTaskData] = useState(null);
