@@ -1,4 +1,5 @@
 export default (sequelize, DataTypes) => {
+  // Creation of user table within database
   const User = sequelize.define("User", {
     userId: {
       type: DataTypes.STRING,
@@ -24,6 +25,7 @@ export default (sequelize, DataTypes) => {
   });
 
   User.associate = (models) => {
+    // Adding foreign keys
     User.belongsToMany(models.Course, {
       through: models.UserCourses,
       as: "courses",
