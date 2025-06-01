@@ -13,6 +13,10 @@ View the [Deployment Instructions](Deployment.md)
 
 View the [API Docs](https://app.swaggerhub.com/apis-docs/assistedassignments/TD3A/1.0.0)
 
+View the [System Design](SystemDesign.png)
+
+View the [Database Schema](schema.png)
+
 # Features
 - Create organized assignments and tasks
 - Configure chatbots for assignments
