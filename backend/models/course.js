@@ -1,4 +1,5 @@
 export default (sequelize, DataTypes) => {
+  // Creation of course table in database
   const Course = sequelize.define("Course", {
     id: {
       type: DataTypes.UUID,
@@ -26,6 +27,7 @@ export default (sequelize, DataTypes) => {
   });
 
   Course.associate = (models) => {
+    // Adding course as a foreign key
     Course.hasMany(models.Assignment, {
       foreignKey: "courseId",
       as: "assignments",
