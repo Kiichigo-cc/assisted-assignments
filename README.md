@@ -28,6 +28,7 @@ View the [API Docs](https://app.swaggerhub.com/apis-docs/assistedassignments/TD3
 - Redis - Cache
 - PostgreSQL - Database
 - Sequelize - Database ORM
+- Auth0 - User Auth
 
 # Running Locally
 ## 1. Resources to Setup/Install
