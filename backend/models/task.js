@@ -1,4 +1,5 @@
 export default (sequelize, DataTypes) => {
+  // Task table creation in database
   const Task = sequelize.define("Task", {
     title: DataTypes.STRING,
     description: DataTypes.TEXT,
@@ -10,6 +11,7 @@ export default (sequelize, DataTypes) => {
   });
 
   Task.associate = (models) => {
+    // Adding task as a foreign key into assignment
     Task.belongsTo(models.Assignment, {
       foreignKey: "assignmentId",
       as: "assignment",
