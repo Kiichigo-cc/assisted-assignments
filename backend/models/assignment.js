@@ -1,4 +1,5 @@
 export default (sequelize, DataTypes) => {
+  // Creation of the database for the assignments
   const Assignment = sequelize.define("Assignment", {
     name: {
       type: DataTypes.STRING,
@@ -36,6 +37,7 @@ export default (sequelize, DataTypes) => {
   });
 
   Assignment.associate = (models) => {
+    // Adding foreign key to other tables that use assignments
     Assignment.belongsTo(models.Course, {
       foreignKey: "courseId",
       as: "course",
