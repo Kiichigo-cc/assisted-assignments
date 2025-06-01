@@ -1,4 +1,4 @@
-# <img src="logo.png" alt="Logo" width="50"/> Assisted Assignments
+# <img src="logo.png" alt="Logo" width="50"/> [Assisted Assignments](https://assisted-assignments.vercel.app/)
 
 
 ## A web-based tool for creating and executing task-delineated, collaborative, AI-assisted assignments
