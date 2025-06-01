@@ -104,6 +104,45 @@ npm start
 ```
 After running the frontend and backend you will be able to access the application at http://localhost:5173/
 
+# Maintenance/Troubleshooting guidelines
+## Frontend
+- This project uses shadcn/ui components to maintain a consistent design system. View the [shadcn docs](https://ui.shadcn.com/docs/components) to learn more about how to use the ui components.
+- Noteable Folders & Files:
+```
+├── frontend/
+│   ├── src/
+│   │   ├── api/ - Contains backend request functions
+│   │   ├── components/ - Reusable React components
+│   │   │   ├── assignments/
+│   │   │   ├── courses/
+│   │   │   ├── student-reports/ - Components for the student metrics page
+│   │   │   ├── user-permissions/ - Components for controlling access to UI elements
+│   │   │   ├── ui/ - shadcn component library
+│   │   │   ├── Chatbot.jsx - Chatbot interface component
+│   │   │   ├── Chatlogs.jsx - Chtalogs interface component
+│   │   ├── hooks/
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   └── index.css
+```
+
+## Backend
+- This project uses Sequelize for the Database ORM. View the [sequelize docs](https://sequelize.org/docs/v6/other-topics/migrations/) to make migrations to the database.
+- Running `npm start` will automtatically run any database migrations that were created.
+- On Windows, WSL is required for installing Redis.
+- Noteable Folders & Files:
+```
+├── backend/
+│   ├── config/ - Database environment configurations
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── middleware/
+│   ├── migrations/
+│   ├── queries/ - Scripts to query the database
+│   └── server.js
+```
+
 # User Guides: Teachers and Students
 
 ---
