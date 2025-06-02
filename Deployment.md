@@ -1,5 +1,5 @@
 # Deployment
-This setup works for the current project, but more scalable deployment methods may be necessary if user demand grows.
+This setup works for the current project, but more scalable deployment methods may be necessary if user demand grows. This guide assumes that you have already set up the repo and Auth0 locally.
 ## 1. Frontend Deployment
 The current Frontend is deployed on [Vercel](https://vercel.com/). To deploy the Frontend on Vercel, create an account and link a GitHub Account. Start a new project, and select this GitHub Repository. Under Framework Preset select Vite, in Root Directory select frontend. In the Environment Variables Section, copy the variables from the frontend .env file. 
 
