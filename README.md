@@ -62,7 +62,7 @@ Navigate to the directory where you want to store the project.
 
 Run the following command to clone the repository:
 ```
-git clone https://github.com/CollinK23/assisted-assignments.git
+git clone https://github.com/Kiichigo-cc/assisted-assignments.git
 ```
 After cloning, navigate into the project folder:
 ```
