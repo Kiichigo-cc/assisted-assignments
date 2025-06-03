@@ -232,6 +232,16 @@ Enter in prompts in the text box at the bottom and submit your questions to the 
 
 ---
 
+License
+
+ISC License
+
+Copyright (c) 2025 TD3A
+
+Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
+
+---
+
 # Support and Contact Information
 Please send any questions you have about the project or implementation to any of our team members who worked on this project:
 
