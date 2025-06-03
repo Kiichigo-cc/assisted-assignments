@@ -28,6 +28,7 @@ The current Backend is deployed on [Render](https://render.com/). To deploy the 
 NODE_ENV=production
 REDIS_URL= *The value for the one created in Vercel*
 DATABASE_URL = "The value for the one created in Vercel*
+ALLOWED_ORIGINS = *The link to the frontend website*
 ```
 Deploy the service. Once deployment is complete, you'll receive an onrender.com link to access it.
 ![image](https://github.com/user-attachments/assets/63cd2f5a-103a-4e2e-b6f2-f5f71dcd58e4)
