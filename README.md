@@ -258,5 +258,5 @@ Please send any questions you have about the project or implementation to any of
   Email: [meenkass@oregonstate.edu](mailto:meenkass@oregonstate.edu)
 
 - **Trent Matsumura**  
-  Email: [matsumut@oregonstate.edu](mailto:matsumut@oregonstate.edu)
+  Email: [tstyle926@gmail.com](mailto:tstyle926@gmail.com)
 
